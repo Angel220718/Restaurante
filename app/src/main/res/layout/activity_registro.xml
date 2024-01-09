@@ -6,73 +6,100 @@
     android:layout_height="match_parent"
     tools:context=".RegistroActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+
+    <ImageView
+        android:id="@+id/imageViewProfile"
+        android:layout_width="147dp"
+        android:layout_height="142dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/circle_background"
+        android:contentDescription="@null"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo1" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="359dp"
+        android:layout_height="439dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfile">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:text="Ingrese Sus Datos"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold|italic" />
 
         <EditText
-            android:id="@+id/etDni"
+            android:id="@+id/InNombre"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="D.N.I." />
-
-        <EditText
-            android:id="@+id/etNames"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="65dp"
             android:hint="Nombres"
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/etLastNames"
+            android:id="@+id/InApellido"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="65dp"
             android:hint="Apellidos"
             android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/etPhoneNumber"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/InTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
             android:hint="Número de celular"
             android:inputType="phone" />
 
-        <EditText
-            android:id="@+id/etEmail"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/InCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
             android:hint="Correo electrónico"
             android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/etPassword"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/InContraseña"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
             android:hint="Contraseña"
             android:inputType="textPassword" />
 
-        <EditText
-            android:id="@+id/etConfirmPassword"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Repite la contraseña"
-            android:inputType="textPassword" />
+            android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/btnCreateAccount"
-            android:layout_width="wrap_content"
+            android:id="@+id/add_cliente"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:text="CREAR UNA CUENTA" />
 
     </LinearLayout>
