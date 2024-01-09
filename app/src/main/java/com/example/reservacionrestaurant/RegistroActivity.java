@@ -1,5 +1,6 @@
 package com.example.reservacionrestaurant;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -72,6 +73,7 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Toast.makeText(getApplicationContext(), "Datos ingresados Correctamente", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(RegistroActivity.this, ListaRestaurantActivity.class));
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {

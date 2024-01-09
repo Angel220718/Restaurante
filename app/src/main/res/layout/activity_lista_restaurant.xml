@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,24 +12,21 @@
         android:id="@+id/imageViewProfile"
         android:layout_width="147dp"
         android:layout_height="142dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/circle_background"
         android:contentDescription="@null"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo1" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="316dp"
+        android:layout_height="528dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layerType="none"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,68 +39,60 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:text="Ingrese Sus Datos"
+            android:text="Reserva en los mejores Restaurante"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold|italic" />
 
-        <EditText
-            android:id="@+id/InNombre"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:hint="Nombres"
-            android:inputType="textPersonName" />
+            android:layout_height="10dp" />
 
         <EditText
-            android:id="@+id/InApellido"
+            android:id="@+id/Buscador"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:hint="Apellidos"
-            android:inputType="textPersonName" />
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Buscar"
+            android:inputType="text"
+            android:textAlignment="center"
+            android:textStyle="italic" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="10dp" />
 
-        <EditText
-            android:id="@+id/InTelefono"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:hint="Número de celular"
-            android:inputType="phone" />
+            android:layout_height="92dp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="10dp" />
 
-        <EditText
-            android:id="@+id/InCorreo"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:hint="Correo electrónico"
-            android:inputType="textEmailAddress" />
+            android:layout_height="92dp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="10dp" />
 
-        <EditText
-            android:id="@+id/InContraseña"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:hint="Contraseña"
-            android:inputType="textPassword" />
+            android:layout_height="92dp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="10dp" />
 
-        <Button
-            android:id="@+id/add_cliente"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="CREAR UNA CUENTA" />
+            android:layout_height="92dp" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
