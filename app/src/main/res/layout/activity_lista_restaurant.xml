@@ -62,19 +62,20 @@
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewProfile"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_height="match_parent"
+
+
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/McDonald"
                     android:layout_width="match_parent"
                     android:layout_height="92dp">
 
@@ -89,7 +90,7 @@
                             android:layout_width="40dp"
                             android:layout_height="59dp"
                             android:contentDescription="@null"
-                            android:src="@drawable/logo1" />
+                            android:src="@drawable/logo_mcdonal" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -101,7 +102,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="DETALLE"
+                                android:text="McDonald´s"
                                 android:textAlignment="center"
                                 android:textStyle="bold" />
 
@@ -110,7 +111,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="AV. uillermo Gulman #661, Piura"
+                                android:text="AV. 29 y Sedalana"
                                 android:textAlignment="center"
                                 android:textStyle="bold" />
 
@@ -119,7 +120,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="11:00am - 20:00pm"
+                                android:text="09:00am - 21:00pm"
                                 android:textAlignment="center"
                                 android:textStyle="bold" />
 
@@ -133,6 +134,7 @@
                     android:layout_height="10dp" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/Kfc"
                     android:layout_width="match_parent"
                     android:layout_height="92dp">
 
@@ -147,7 +149,7 @@
                             android:layout_width="40dp"
                             android:layout_height="59dp"
                             android:contentDescription="@null"
-                            android:src="@drawable/logo1" />
+                            android:src="@drawable/logo_kfc" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -155,16 +157,16 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textview2"
+                                android:id="@+id/textview4"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="OTRO DETALLE"
+                                android:text="KFC"
                                 android:textAlignment="center"
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView4"
+                                android:id="@+id/textView5"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -173,7 +175,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/textView6"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -191,6 +193,7 @@
                     android:layout_height="10dp" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/Mexican-food"
                     android:layout_width="match_parent"
                     android:layout_height="92dp">
 
@@ -205,7 +208,7 @@
                             android:layout_width="40dp"
                             android:layout_height="59dp"
                             android:contentDescription="@null"
-                            android:src="@drawable/logo1" />
+                            android:src="@drawable/logo_mexican" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -213,16 +216,16 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textview3"
+                                android:id="@+id/textview7"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="OTRO DETALLE"
+                                android:text="Mexican-Foot"
                                 android:textAlignment="center"
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView6"
+                                android:id="@+id/textView8"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -231,7 +234,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView7"
+                                android:id="@+id/textView9"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -249,6 +252,7 @@
                     android:layout_height="10dp" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview4"
                     android:layout_width="match_parent"
                     android:layout_height="92dp">
 
@@ -271,7 +275,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textview4"
+                                android:id="@+id/textview10"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -280,7 +284,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView8"
+                                android:id="@+id/textView11"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -289,7 +293,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView9"
+                                android:id="@+id/textView12"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -301,13 +305,129 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview5"
+                    android:layout_width="match_parent"
+                    android:layout_height="92dp"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/imageViewRestaurant5"
+                            android:layout_width="40dp"
+                            android:layout_height="59dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/logo1" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textview13"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="OTRO DETALLE"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView14"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Calle Ejemplo #789, Otra Ciudad"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView15"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="10:00am - 19:00pm"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview6"
+                    android:layout_width="match_parent"
+                    android:layout_height="92dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/imageViewRestaurant6"
+                            android:layout_width="40dp"
+                            android:layout_height="59dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/logo1" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textview16"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="DETALLE"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView17"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="AV. Guillermo Gulman #661, Piura"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView18"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="11:00am - 20:00pm"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
             </LinearLayout>
-
-        </androidx.viewpager.widget.ViewPager>
+        </ScrollView>
 
     </LinearLayout>
 

@@ -10,5 +10,9 @@ public class ListaRestaurantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_restaurant);
+
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        RestaurantPagerAdapter adapter = new RestaurantPagerAdapter(this, getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
     }
 }
