@@ -22,7 +22,7 @@ import java.util.Map;
 public class RegistroActivity extends AppCompatActivity {
 
     Button add_cliente;
-    EditText InNombre, InApellido, InTelefono, InCorreo, InContraseña;
+    EditText InNombre, InApellido, InTelefono, InUsuario, InContraseña;
     private FirebaseFirestore mfirestore;
 
     @Override
@@ -36,7 +36,7 @@ public class RegistroActivity extends AppCompatActivity {
         InNombre = findViewById(R.id.InNombre);
         InApellido = findViewById(R.id.InApellido);
         InTelefono = findViewById(R.id.InTelefono);
-        InCorreo = findViewById(R.id.InCorreo);
+        InUsuario = findViewById(R.id.InUsuario);
         InContraseña = findViewById(R.id.InContraseña);
         add_cliente = findViewById(R.id.add_cliente);
 
@@ -46,24 +46,24 @@ public class RegistroActivity extends AppCompatActivity {
                 String nombre = InNombre.getText().toString().trim();
                 String apellido = InApellido.getText().toString().trim();
                 String telefono = InTelefono.getText().toString().trim();
-                String correo = InCorreo.getText().toString().trim();
+                String usuario = InUsuario.getText().toString().trim();
                 String contraseña = InContraseña.getText().toString().trim();
 
-                if (nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || correo.isEmpty() || contraseña.isEmpty()) {
+                if (nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || usuario.isEmpty() || contraseña.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Llene todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
-                    post(nombre, apellido, telefono, correo, contraseña);
+                    post(nombre, apellido, telefono, usuario, contraseña);
                 }
             }
         });
     }
 
-    private void post(String nombre, String apellido, String telefono, String correo, String contraseña) {
+    private void post(String nombre, String apellido, String telefono, String usuario, String contraseña) {
         Map<String, Object> map = new HashMap<>();
         map.put("Nombre", nombre);
         map.put("Apellido", apellido);
         map.put("Telefono", telefono);
-        map.put("Correo", correo);
+        map.put("Usuario", usuario);
         map.put("Contraseña", contraseña);
 
         mfirestore.collection("Cliente").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

@@ -76,11 +76,11 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/InCorreo"
+            android:id="@+id/InUsuario"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:hint="Correo electrónico"
-            android:inputType="textEmailAddress" />
+            android:hint="Usuario"
+            android:inputType="textPersonName" />
 
         <Space
             android:layout_width="match_parent"

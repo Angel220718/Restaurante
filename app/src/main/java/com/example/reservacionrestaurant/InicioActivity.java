@@ -1,16 +1,14 @@
 package com.example.reservacionrestaurant;
 
-import androidx.activity.ComponentActivity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+public class InicioActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
-
-    Button btn_add, btn_login;
+    Button btn_add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,19 +16,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         btn_add = findViewById(R.id.btn_add);
-        btn_login =findViewById(R.id.btn_login);
 
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, RegistroActivity.class));
-            }
-        });
-
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ListaRestaurantActivity.class));
+                startActivity(new Intent(InicioActivity.this, RegistroActivity.class));
             }
         });
 
