@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ReservacionRestaurant</string>
+    <string name="app_name">Reservación Restaurant</string>
     <string name="title_activity_registro_cliente">RegistroClienteActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

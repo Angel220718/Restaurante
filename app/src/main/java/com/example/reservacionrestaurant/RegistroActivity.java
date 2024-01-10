@@ -9,10 +9,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Firebase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -22,7 +22,7 @@ import java.util.Map;
 public class RegistroActivity extends AppCompatActivity {
 
     Button add_cliente;
-    EditText InNombre,InApellido,InTelefono ,InCorreo ,InContraseña;
+    EditText InNombre, InApellido, InTelefono, InCorreo, InContraseña;
     private FirebaseFirestore mfirestore;
 
     @Override
@@ -49,20 +49,17 @@ public class RegistroActivity extends AppCompatActivity {
                 String correo = InCorreo.getText().toString().trim();
                 String contraseña = InContraseña.getText().toString().trim();
 
-                if (nombre.isEmpty() && apellido.isEmpty() && telefono.isEmpty() && correo.isEmpty() && contraseña.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "LLene los Datos", Toast.LENGTH_SHORT).show();
+                if (nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || correo.isEmpty() || contraseña.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Llene todos los datos", Toast.LENGTH_SHORT).show();
                 } else {
                     post(nombre, apellido, telefono, correo, contraseña);
                 }
             }
         });
-
-
-
     }
 
     private void post(String nombre, String apellido, String telefono, String correo, String contraseña) {
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("Nombre", nombre);
         map.put("Apellido", apellido);
         map.put("Telefono", telefono);
@@ -72,14 +69,14 @@ public class RegistroActivity extends AppCompatActivity {
         mfirestore.collection("Cliente").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(getApplicationContext(), "Datos ingresados Correctamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Datos ingresados correctamente", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(RegistroActivity.this, ListaRestaurantActivity.class));
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Error al Ingresar los datos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error al ingresar los datos", Toast.LENGTH_SHORT).show();
             }
         });
     }
