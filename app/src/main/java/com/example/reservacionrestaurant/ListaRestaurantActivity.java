@@ -42,21 +42,27 @@ public class ListaRestaurantActivity extends AppCompatActivity {
         McDonald.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ListaRestaurantActivity.this, Reservas_Activity.class));
+                Intent intent = new Intent(ListaRestaurantActivity.this, Reservas_Activity.class);
+                intent.putExtra("restaurante_id", "McDonald");
+                startActivity(intent);
             }
         });
 
         Mexican_food.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ListaRestaurantActivity.this, Reservas_Activity.class));
+                Intent intent = new Intent(ListaRestaurantActivity.this, Reservas_Activity.class);
+                intent.putExtra("restaurante_id", "Mexican_food");
+                startActivity(intent);
             }
         });
 
         Kfc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ListaRestaurantActivity.this, Reservas_Activity.class));
+                Intent intent = new Intent(ListaRestaurantActivity.this, Reservas_Activity.class);
+                intent.putExtra("restaurante_id", "Kfc");
+                startActivity(intent);
             }
         });
 

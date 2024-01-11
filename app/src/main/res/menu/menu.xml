@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/Mesa"
+        android:icon="@mipmap/ic_mesa"
+        android:title="Mesa" />
+
+    <item
+        android:id="@+id/Reserva"
+        android:icon="@mipmap/ic_reserva"
+        android:title="Reserva" />
+
+</menu>
