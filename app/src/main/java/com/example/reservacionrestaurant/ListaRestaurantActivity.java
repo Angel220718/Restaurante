@@ -1,28 +1,30 @@
 package com.example.reservacionrestaurant;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.SearchView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import org.checkerframework.common.subtyping.qual.Bottom;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 
 public class ListaRestaurantActivity extends AppCompatActivity {
 
-    Button exit;
+    Button exit, cuenta;
+
+    CardView McDonald, Mexican_food, Kfc;
 
     FirebaseAuth mAuth;
+    SearchView search_view;
+    Query query;
+    FirebaseFirestore mFirestore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,39 @@ public class ListaRestaurantActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         exit = findViewById(R.id.exit);
+        McDonald = findViewById(R.id.McDonald);
+        Kfc = findViewById(R.id.Kfc);
+        Mexican_food = findViewById(R.id.Mexican_food);
+        cuenta = findViewById(R.id.cuenta);
+
+
+        McDonald.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListaRestaurantActivity.this, Reservas_Activity.class));
+            }
+        });
+
+        Mexican_food.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListaRestaurantActivity.this, Reservas_Activity.class));
+            }
+        });
+
+        Kfc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListaRestaurantActivity.this, Reservas_Activity.class));
+            }
+        });
+
+        cuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListaRestaurantActivity.this, Reservas_Activity.class));
+            }
+        });
 
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,7 +75,7 @@ public class ListaRestaurantActivity extends AppCompatActivity {
                 startActivity(new Intent(ListaRestaurantActivity.this, MainActivity.class));
             }
         });
-    }
 
+    }
 
 }
