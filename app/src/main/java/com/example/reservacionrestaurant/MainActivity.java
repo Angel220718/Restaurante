@@ -17,12 +17,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.ktx.Firebase;
+
 
 public class MainActivity extends AppCompatActivity {
 
     Button btn_add, btn_login;
     EditText Usuario, Password;
+
     FirebaseAuth mAuth;
 
     @Override
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
+
 
         btn_add = findViewById(R.id.btn_add);
 
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     private void userValidacion(String usuario, String password) {
@@ -78,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Llene datos validos", Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
     @Override
