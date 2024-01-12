@@ -11,13 +11,18 @@ import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.annotation.NonNull;
+
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.example.reservacionrestaurant.R;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,10 +95,12 @@ public class MesaFragment extends Fragment {
 
             DatabaseReference mesaReference = databaseReference.child("estadoMesa").child(String.valueOf(numeroMesa));
             mesaReference.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult().getValue() != null) {
-                    String estadoMesa = String.valueOf(task.getResult().getValue());
-                    actualizarColorDeFondo(estadoMesa, (ImageView) itemview);
-                }
+                mesaReference.get().addOnCompleteListener(taskReloaded -> {
+                    if (taskReloaded.isSuccessful() && taskReloaded.getResult().getValue() != null) {
+                        String estadoMesa = String.valueOf(taskReloaded.getResult().getValue());
+                        actualizarColorDeFondo(estadoMesa, (ImageView) itemview);
+                    }
+                });
             });
         });
 
@@ -168,16 +175,26 @@ public class MesaFragment extends Fragment {
 
             int numeroMesa = position + 1;
             DatabaseReference mesaReference = FirebaseDatabase.getInstance().getReference().child("mesas").child("mesa_" + numeroMesa);
-            mesaReference.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult().getValue() != null) {
-                    String estadoMesa = String.valueOf(task.getResult().child("estadoMesa").getValue());
-                    actualizarColorDeFondo(estadoMesa, imageView);
 
-                    if (mesasSeleccionadas.contains(numeroMesa)) {
-                        imageView.setAlpha(0.5f);
-                    } else {
-                        imageView.setAlpha(1.0f);
+            mesaReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        // Asegúrate de que los datos existan antes de intentar acceder a ellos
+                        String estadoMesa = String.valueOf(dataSnapshot.child("estadoMesa").getValue());
+                        actualizarColorDeFondo(estadoMesa, imageView);
+
+                        if (mesasSeleccionadas.contains(numeroMesa)) {
+                            imageView.setAlpha(0.5f);
+                        } else {
+                            imageView.setAlpha(1.0f);
+                        }
                     }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Manejar errores si es necesario
                 }
             });
 
@@ -185,4 +202,5 @@ public class MesaFragment extends Fragment {
         }
 
     }
+
     }

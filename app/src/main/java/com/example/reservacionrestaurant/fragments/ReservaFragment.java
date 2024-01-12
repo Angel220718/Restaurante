@@ -30,6 +30,8 @@ public class ReservaFragment extends Fragment {
 
     private static final String ARG_MESAS_SELECCIONADAS = "mesas_seleccionadas";
 
+    private ArrayList<Integer> mesasSeleccionadas;
+
     public ReservaFragment() {
         // Required empty public constructor
     }
@@ -62,11 +64,8 @@ public class ReservaFragment extends Fragment {
         spinnerMesas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String mesaSeleccionada = parentView.getItemAtPosition(position).toString();
-
-                // Llenar automáticamente el formulario con datos de la mesa seleccionada
-                etNombreCliente.setText("Nombre del Cliente para " + mesaSeleccionada);
-                // También podrías llenar otros campos según sea necesario
+                int numeroMesa = position + 1;  // Suponiendo que la posición en el Spinner representa el número de la mesa
+                etNombreCliente.setText("Nombre del Cliente para mesa_" + numeroMesa);
             }
 
             @Override
@@ -104,8 +103,11 @@ public class ReservaFragment extends Fragment {
 
         // Iterar sobre las mesas seleccionadas y agregar la información de la reserva
         for (int numeroMesa : mesasSeleccionadas) {
+            String numeroMesaMostrar = formatearNumeroMesaMostrar(numeroMesa);
+            String numeroMesaBaseDatos = formatearNumeroMesaBaseDatos(numeroMesa);
+
             // Crear una referencia para la reserva en la mesa específica
-            DatabaseReference reservaMesaRef = reservasRef.child("mesa_" + numeroMesa);
+            DatabaseReference reservaMesaRef = reservasRef.child("mesa_" + numeroMesaMostrar);
 
             // Crear un objeto para almacenar la información de la reserva
             Reserva reserva = new Reserva(nombreCliente, "Ocupado"); // Puedes crear una clase Reserva según tus necesidades
@@ -120,4 +122,18 @@ public class ReservaFragment extends Fragment {
         // Finalmente, cierra el fragmento actual
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
+
+    private String formatearNumeroMesaMostrar(int numeroMesa) {
+        // Mostrar sin formato para números del 1 al 9, y con formato para 10 en adelante
+        return numeroMesa >= 10 ? String.format("%02d", numeroMesa) : String.valueOf(numeroMesa);
+    }
+
+    private String formatearNumeroMesaBaseDatos(int numeroMesa) {
+        // Siempre utilizar formato para crear referencias en la base de datos
+        return String.format("%02d", numeroMesa);
+    }
+
+
+
+
 }
