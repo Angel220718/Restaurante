@@ -14,11 +14,17 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="8dp" />
 
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="10dp" />
+
     <Button
         android:id="@+id/btnIrAReserva"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ir a Reserva"
-        android:layout_centerInParent="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="0dp"
+        android:text="Ir a Reserva" />
 
 </RelativeLayout>

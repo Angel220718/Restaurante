@@ -55,16 +55,16 @@ public class ListaRestaurantActivity extends AppCompatActivity {
                 intent.putExtra("restaurante_id", "Mexican_food");
                 startActivity(intent);
             }
-        });
+            });
 
         Kfc.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ListaRestaurantActivity.this, Reservas_Activity.class);
-                intent.putExtra("restaurante_id", "Kfc");
-                startActivity(intent);
-            }
-        });
+                public void onClick(View v) {
+                    Intent intent = new Intent(ListaRestaurantActivity.this, Reservas_Activity.class);
+                    intent.putExtra("restaurante_id", "Kfc");
+                    startActivity(intent);
+                }
+            });
 
         cuenta.setOnClickListener(new View.OnClickListener() {
             @Override

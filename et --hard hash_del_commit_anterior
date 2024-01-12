@@ -1,0 +1,15 @@
+[33m6ac1704[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{0}: commit: creacion de interfaazes para reserva y mesas sin coneccion a la base de datos
+[33m775356e[m HEAD@{1}: commit: actualizacion
+[33m30fdbb8[m HEAD@{2}: commit: actualizacion
+[33mdbc8f53[m HEAD@{3}: commit: validacion del login con firebase y acceso mediante usuarios agregados por el registro tofo funcionando
+[33m010c300[m HEAD@{4}: commit: creacion de login sin validacion en firebase y registro con agregacion de datos a firebase
+[33m4b864ba[m HEAD@{5}: commit: creaccion de scroll para listar restaurant
+[33m75f0b3f[m HEAD@{6}: commit: creaccion de scroll para listar restaurant
+[33m9d9217e[m HEAD@{7}: commit: creaccion de tipo paginador para listar restaurant
+[33m1064a4f[m HEAD@{8}: commit: e
+[33m1c72b33[m HEAD@{9}: commit: e
+[33m0fe0468[m HEAD@{10}: commit: creacion de listado de restaurant
+[33mfbdb8fe[m HEAD@{11}: commit: creacion de registro de cliente
+[33mfff2627[m HEAD@{12}: commit: pruebas
+[33md314c5b[m HEAD@{13}: commit: conecction base date
+[33m3081538[m HEAD@{14}: commit (initial): New Project

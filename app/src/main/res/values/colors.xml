@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorSelected">#FF4081</color>
+    <color name="colorLibre">#00FF00</color> <!-- Verde -->
+    <color name="colorOcupada">#005EFF</color> <!-- Rojo -->
+
 </resources>

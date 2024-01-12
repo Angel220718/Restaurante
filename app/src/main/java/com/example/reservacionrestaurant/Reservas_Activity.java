@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent; // Agrega esta línea para importar la clase Intent
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -14,24 +14,27 @@ import com.example.reservacionrestaurant.fragments.MesaFragment;
 import com.example.reservacionrestaurant.fragments.ReservaFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 public class Reservas_Activity extends AppCompatActivity {
 
     ImageView imagenIdentificadora;
     BottomNavigationView menu;
+    String restauranteId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservas);
 
-        mostrarfragment(new MesaFragment());
-
         menu = findViewById(R.id.menu);
         imagenIdentificadora = findViewById(R.id.imagen_identificadora);
 
+
         Intent intent = getIntent();
         if (intent != null) {
-            String restauranteId = intent.getStringExtra("restaurante_id");
+
+            restauranteId = intent.getStringExtra("restaurante_id");
 
             if ("McDonald".equals(restauranteId)) {
                 imagenIdentificadora.setImageResource(R.drawable.logo_mdonal2);
@@ -40,23 +43,29 @@ public class Reservas_Activity extends AppCompatActivity {
             } else if ("Kfc".equals(restauranteId)) {
                 imagenIdentificadora.setImageResource(R.drawable.logo_kfc);
             }
+
+            // Pasa la información del restaurante al fragmento MesaFragment
+            MesaFragment mesaFragment = MesaFragment.newInstance(restauranteId, "segundo_parametro");
+            mostrarFragment(mesaFragment);
         }
 
         menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.Reserva) {
-                    mostrarfragment(new ReservaFragment());
+                    mostrarFragment(ReservaFragment.newInstance(new ArrayList<>(), restauranteId));
                 }
                 if (menuItem.getItemId() == R.id.Mesa) {
-                    mostrarfragment(new MesaFragment());
+                    // Pasa la información del restaurante al fragmento MesaFragment
+                    MesaFragment mesaFragment = MesaFragment.newInstance(restauranteId, "segundo_parametro");
+                    mostrarFragment(mesaFragment);
                 }
                 return true;
             }
         });
     }
 
-    private void mostrarfragment(Fragment fragment) {
+    private void mostrarFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();

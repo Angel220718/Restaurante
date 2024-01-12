@@ -1,40 +1,37 @@
 package com.example.reservacionrestaurant.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.example.reservacionrestaurant.R;
-
-import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
-
-import android.widget.BaseAdapter;
-
 import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.example.reservacionrestaurant.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MesaFragment extends Fragment {
     private GridView gridViewMesas;
+    private DatabaseReference databaseReference;
+    private static List<Integer> mesasSeleccionadas = new ArrayList<>();
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-
+    private String restauranteId;
 
     public static MesaFragment newInstance(String param1, String param2) {
         MesaFragment fragment = new MesaFragment();
@@ -56,78 +53,91 @@ public class MesaFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mesa, container, false);
 
         gridViewMesas = view.findViewById(R.id.gridViewMesas);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        mesasSeleccionadas = new ArrayList<>();
 
         int[] listaIconosMesas = {
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-                R.mipmap.ic_mesa,
-
-                // Agrega más iconos según sea necesario
+                R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa,
+                R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa,
+                R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa,
+                R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa,
+                R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa,
+                R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa, R.mipmap.ic_mesa,
+                R.mipmap.ic_mesa, R.mipmap.ic_mesa
         };
 
-        // Configurar el adaptador para el GridView
         MesaAdapter adapter = new MesaAdapter(listaIconosMesas);
         gridViewMesas.setAdapter(adapter);
 
-        // Aquí puedes manejar la selección de la mesa en el gridViewMesas
+        gridViewMesas.setOnItemClickListener((parent, itemview, position, id) -> {
+            int numeroMesa = position + 1;
 
-        gridViewMesas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Cambiar el estado de selección de la mesa al hacer clic
-                adapter.toggleMesaSelection(position);
+            if (mesasSeleccionadas.contains(numeroMesa)) {
+                mesasSeleccionadas.remove(Integer.valueOf(numeroMesa));
+            } else {
+                mesasSeleccionadas.add(numeroMesa);
             }
+
+            adapter.notifyDataSetChanged();
+
+            DatabaseReference mesaReference = databaseReference.child("estadoMesa").child(String.valueOf(numeroMesa));
+            mesaReference.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult().getValue() != null) {
+                    String estadoMesa = String.valueOf(task.getResult().getValue());
+                    actualizarColorDeFondo(estadoMesa, (ImageView) itemview);
+                }
+            });
         });
 
         Button btnIrAReserva = view.findViewById(R.id.btnIrAReserva);
-        btnIrAReserva.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Obtener las mesas seleccionadas
-                List<Integer> mesasSeleccionadas = adapter.getMesasSeleccionadas();
-
-                // Crear una instancia de ReservaFragment y pasar las mesas seleccionadas como argumento
-                ReservaFragment reservaFragment = ReservaFragment.newInstance(mesasSeleccionadas);
-
-                // Reemplazar el fragmento actual con ReservaFragment
-                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, reservaFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
+        btnIrAReserva.setOnClickListener(v -> {
+            ReservaFragment reservaFragment = ReservaFragment.newInstance(new ArrayList<>(mesasSeleccionadas), restauranteId);
+            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, reservaFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         });
-
 
         return view;
     }
 
-    public class MesaAdapter extends BaseAdapter {
+    private static void actualizarColorDeFondo(String estadoMesa, ImageView imageView) {
+        int iconoResId;
+
+        switch (estadoMesa) {
+            case "Libre":
+                // Cargar la imagen verde
+                iconoResId = R.mipmap.ic_mesa_verde;
+                break;
+            default:
+                // Cargar la imagen por defecto o neutral
+                iconoResId = R.mipmap.ic_mesa;
+                break;
+        }
+
+        // Cargar y aplicar la imagen con Glide
+        Glide.with(imageView.getContext())
+                .load(iconoResId)
+                .transform(new CircleCrop()) // Otras transformaciones si son necesarias
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imageView);
+    }
+
+    private static class MesaAdapter extends BaseAdapter {
         private final int[] listaIconosMesas;
-        private boolean[] mesaSeleccionada;
 
         MesaAdapter(int[] listaIconosMesas) {
             this.listaIconosMesas = listaIconosMesas;
-            this.mesaSeleccionada = new boolean[listaIconosMesas.length];
         }
+
 
         @Override
         public int getCount() {
@@ -144,49 +154,35 @@ public class MesaFragment extends Fragment {
             return position;
         }
 
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView imageView;
             if (convertView == null) {
-                // Si la vista no existe, inflarla
                 imageView = new ImageView(parent.getContext());
-                imageView.setLayoutParams(new GridView.LayoutParams(200, 200)); // Ajusta el tamaño según tus necesidades
+                imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setPadding(8, 8, 8, 8);
             } else {
                 imageView = (ImageView) convertView;
             }
 
-// Asignar el icono de la mesa al ImageView
-            imageView.setImageResource(listaIconosMesas[position]);
+            int numeroMesa = position + 1;
+            DatabaseReference mesaReference = FirebaseDatabase.getInstance().getReference().child("mesas").child("mesa_" + numeroMesa);
+            mesaReference.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult().getValue() != null) {
+                    String estadoMesa = String.valueOf(task.getResult().child("estadoMesa").getValue());
+                    actualizarColorDeFondo(estadoMesa, imageView);
 
-            if (mesaSeleccionada[position]) {
-                // Cambiar el color de fondo o aplicar algún efecto para indicar la selección
-                imageView.setBackgroundColor(ContextCompat.getColor(parent.getContext(), R.color.colorSelected));
-            } else {
-                // Restaurar el color de fondo predeterminado
-                imageView.setBackgroundColor(Color.TRANSPARENT);
-            }
+                    if (mesasSeleccionadas.contains(numeroMesa)) {
+                        imageView.setAlpha(0.5f);
+                    } else {
+                        imageView.setAlpha(1.0f);
+                    }
+                }
+            });
 
             return imageView;
-
-        }
-        // Método para cambiar el estado de selección de una mesa
-        public void toggleMesaSelection(int position) {
-            mesaSeleccionada[position] = !mesaSeleccionada[position];
-            notifyDataSetChanged(); // Notificar al adaptador sobre el cambio
         }
 
-        // Método para obtener las mesas seleccionadas
-        public List<Integer> getMesasSeleccionadas() {
-            List<Integer> mesasSeleccionadas = new ArrayList<>();
-            for (int i = 0; i < mesaSeleccionada.length; i++) {
-                if (mesaSeleccionada[i]) {
-                    mesasSeleccionadas.add(i + 1); // Agregar la mesa seleccionada a la lista
-                }
-            }
-            return mesasSeleccionadas;
-        }
     }
-}
+    }
