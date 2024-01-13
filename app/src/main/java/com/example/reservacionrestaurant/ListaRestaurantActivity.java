@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.Query;
 
 
@@ -21,8 +22,6 @@ public class ListaRestaurantActivity extends AppCompatActivity {
     CardView McDonald, Mexican_food, Kfc;
 
     FirebaseAuth mAuth;
-    SearchView search_view;
-    Query query;
     FirebaseFirestore mFirestore;
 
 
@@ -30,7 +29,10 @@ public class ListaRestaurantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_restaurant);
+        FirebaseApp.initializeApp(this);
+
         mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
 
         exit = findViewById(R.id.exit);
         McDonald = findViewById(R.id.McDonald);

@@ -1,6 +1,7 @@
 package com.example.reservacionrestaurant.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,38 +12,40 @@ import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.annotation.NonNull;
-
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.example.reservacionrestaurant.R;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class MesaFragment extends Fragment {
     private GridView gridViewMesas;
-    private DatabaseReference databaseReference;
     private static List<Integer> mesasSeleccionadas = new ArrayList<>();
+
+    private static final String TAG = MesaFragment.class.getSimpleName();
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private CollectionReference mesasCollection;
     private String mParam1;
     private String mParam2;
     private String restauranteId;
 
-    public static MesaFragment newInstance(String param1, String param2) {
+    public static MesaFragment newInstance(String param1, String param2, String restauranteId) {
         MesaFragment fragment = new MesaFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putString("restauranteId", restauranteId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,8 +68,11 @@ public class MesaFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mesa, container, false);
 
+        restauranteId = getArguments().getString("restauranteId");
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+        mesasCollection = mFirestore.collection(restauranteId + "_mesas");
+
         gridViewMesas = view.findViewById(R.id.gridViewMesas);
-        databaseReference = FirebaseDatabase.getInstance().getReference();
         mesasSeleccionadas = new ArrayList<>();
 
         int[] listaIconosMesas = {
@@ -79,7 +85,7 @@ public class MesaFragment extends Fragment {
                 R.mipmap.ic_mesa, R.mipmap.ic_mesa
         };
 
-        MesaAdapter adapter = new MesaAdapter(listaIconosMesas);
+        MesaAdapter adapter = new MesaAdapter(listaIconosMesas, new ArrayList<>());
         gridViewMesas.setAdapter(adapter);
 
         gridViewMesas.setOnItemClickListener((parent, itemview, position, id) -> {
@@ -89,19 +95,12 @@ public class MesaFragment extends Fragment {
                 mesasSeleccionadas.remove(Integer.valueOf(numeroMesa));
             } else {
                 mesasSeleccionadas.add(numeroMesa);
+
+                // Guardar información en Firestore al seleccionar una mesa
+                guardarInformacionMesa(numeroMesa);
             }
 
             adapter.notifyDataSetChanged();
-
-            DatabaseReference mesaReference = databaseReference.child("estadoMesa").child(String.valueOf(numeroMesa));
-            mesaReference.get().addOnCompleteListener(task -> {
-                mesaReference.get().addOnCompleteListener(taskReloaded -> {
-                    if (taskReloaded.isSuccessful() && taskReloaded.getResult().getValue() != null) {
-                        String estadoMesa = String.valueOf(taskReloaded.getResult().getValue());
-                        actualizarColorDeFondo(estadoMesa, (ImageView) itemview);
-                    }
-                });
-            });
         });
 
         Button btnIrAReserva = view.findViewById(R.id.btnIrAReserva);
@@ -113,38 +112,87 @@ public class MesaFragment extends Fragment {
             transaction.commit();
         });
 
+        // Obtener y actualizar los estados de las mesas desde Firebase
+        obtenerEstadosMesasDesdeFirebase(adapter);
+
         return view;
     }
 
-    private static void actualizarColorDeFondo(String estadoMesa, ImageView imageView) {
-        int iconoResId;
+    private void guardarInformacionMesa(int numeroMesa) {
+        // Formatear el número de mesa con ceros a la izquierda
+        String numeroMesaFormateado = String.format(Locale.getDefault(), "%03d", numeroMesa);
 
-        switch (estadoMesa) {
-            case "Libre":
-                // Cargar la imagen verde
-                iconoResId = R.mipmap.ic_mesa_verde;
-                break;
-            default:
-                // Cargar la imagen por defecto o neutral
-                iconoResId = R.mipmap.ic_mesa;
-                break;
-        }
+        DocumentReference mesaDocument = mesasCollection.document("mesa_" + numeroMesaFormateado);
+        Mesa mesa = new Mesa("Ocupado", "", numeroMesa);
 
-        // Cargar y aplicar la imagen con Glide
-        Glide.with(imageView.getContext())
-                .load(iconoResId)
-                .transform(new CircleCrop()) // Otras transformaciones si son necesarias
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(imageView);
+        mesaDocument.set(mesa)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Mesa guardada correctamente"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error al guardar la mesa", e));
     }
+
+
+
+    private void obtenerEstadosMesasDesdeFirebase(MesaAdapter adapter) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection(restauranteId + "_mesas")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<String> estadosMesas = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Mesa mesa = document.toObject(Mesa.class);
+                            String estadoMesa = mesa != null ? mesa.getEstadoMesa() : "Desconocido";
+                            estadosMesas.add(estadoMesa);
+                        }
+
+                        // Ordenar las mesas de manera numérica
+                        Collections.sort(estadosMesas, (mesa1, mesa2) -> {
+                            String[] partesMesa1 = mesa1.split("_");
+                            String[] partesMesa2 = mesa2.split("_");
+
+                            // Verificar si hay al menos dos partes en ambos nombres de mesa
+                            if (partesMesa1.length > 1 && partesMesa2.length > 1) {
+                                try {
+                                    int numeroMesa1 = Integer.parseInt(partesMesa1[1]);
+                                    int numeroMesa2 = Integer.parseInt(partesMesa2[1]);
+                                    return Integer.compare(numeroMesa1, numeroMesa2);
+                                } catch (NumberFormatException e) {
+                                    // Manejar la excepción si no se puede convertir a un número
+                                    e.printStackTrace();
+                                    return 0; // o devuelve un valor predeterminado según tus necesidades
+                                }
+                            } else {
+                                // Manejar el caso donde el formato no es el esperado
+                                return 0; // o devuelve un valor predeterminado según tus necesidades
+                            }
+                        });
+
+
+                        adapter.setEstadosMesas(estadosMesas);
+                    } else {
+                        Exception exception = task.getException();
+                        if (exception != null) {
+                            // Manejar la excepción
+                        }
+                    }
+                });
+    }
+
 
     private static class MesaAdapter extends BaseAdapter {
         private final int[] listaIconosMesas;
+        private List<String> estadosMesas;
 
-        MesaAdapter(int[] listaIconosMesas) {
+        MesaAdapter(int[] listaIconosMesas, List<String> estadosMesas) {
             this.listaIconosMesas = listaIconosMesas;
+            this.estadosMesas = estadosMesas;
         }
 
+        void setEstadosMesas(List<String> estadosMesas) {
+            this.estadosMesas = estadosMesas;
+            notifyDataSetChanged();
+        }
 
         @Override
         public int getCount() {
@@ -174,33 +222,52 @@ public class MesaFragment extends Fragment {
             }
 
             int numeroMesa = position + 1;
-            DatabaseReference mesaReference = FirebaseDatabase.getInstance().getReference().child("mesas").child("mesa_" + numeroMesa);
+            String estadoMesa = obtenerEstadoMesa(numeroMesa);
 
-            mesaReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        // Asegúrate de que los datos existan antes de intentar acceder a ellos
-                        String estadoMesa = String.valueOf(dataSnapshot.child("estadoMesa").getValue());
-                        actualizarColorDeFondo(estadoMesa, imageView);
-
-                        if (mesasSeleccionadas.contains(numeroMesa)) {
-                            imageView.setAlpha(0.5f);
-                        } else {
-                            imageView.setAlpha(1.0f);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Manejar errores si es necesario
-                }
-            });
+            actualizarColorDeFondo(estadoMesa, imageView, numeroMesa);
 
             return imageView;
         }
 
-    }
+
+        private String obtenerEstadoMesa(int numeroMesa) {
+            if (estadosMesas == null || estadosMesas.isEmpty() || numeroMesa <= 0 || numeroMesa > estadosMesas.size()) {
+                return "Ocupado";
+            }
+
+            return estadosMesas.get(numeroMesa - 1);
+        }
+
+
+        private void actualizarColorDeFondo(String estadoMesa, ImageView imageView, int numeroMesa) {
+            int iconoResId;
+
+            switch (estadoMesa) {
+                case "Libre":
+                    iconoResId = R.mipmap.ic_mesa_verde;
+                    break;
+                case "Ocupado":
+                    iconoResId = R.mipmap.ic_mesa_rojo;
+                    break;
+                default:
+                    iconoResId = R.mipmap.ic_mesa;
+                    break;
+            }
+
+            Glide.with(imageView.getContext())
+                    .load(iconoResId)
+                    .transform(new CircleCrop())
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(imageView);
+
+            // Aquí puedes personalizar aún más la apariencia según el estado
+            if (mesasSeleccionadas.contains(numeroMesa)) {
+                imageView.setAlpha(0.5f);
+            } else {
+                imageView.setAlpha(1.0f);
+            }
+        }
+
 
     }
+}

@@ -45,7 +45,8 @@ public class Reservas_Activity extends AppCompatActivity {
             }
 
             // Pasa la información del restaurante al fragmento MesaFragment
-            MesaFragment mesaFragment = MesaFragment.newInstance(restauranteId, "segundo_parametro");
+            // Por ejemplo, al seleccionar el restaurante McDonald
+            MesaFragment mesaFragment = MesaFragment.newInstance("param1", "param2", restauranteId);
             mostrarFragment(mesaFragment);
         }
 
@@ -57,7 +58,8 @@ public class Reservas_Activity extends AppCompatActivity {
                 }
                 if (menuItem.getItemId() == R.id.Mesa) {
                     // Pasa la información del restaurante al fragmento MesaFragment
-                    MesaFragment mesaFragment = MesaFragment.newInstance(restauranteId, "segundo_parametro");
+                    // Por ejemplo, al seleccionar el restaurante McDonald
+                    MesaFragment mesaFragment = MesaFragment.newInstance("param1", "param2", restauranteId);
                     mostrarFragment(mesaFragment);
                 }
                 return true;

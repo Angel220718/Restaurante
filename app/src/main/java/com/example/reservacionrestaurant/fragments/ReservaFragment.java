@@ -14,17 +14,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.reservacionrestaurant.ListaRestaurantActivity;
-import com.example.reservacionrestaurant.MainActivity;
 import com.example.reservacionrestaurant.R;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class ReservaFragment extends Fragment {
 
     private EditText etNombreCliente;
-    private DatabaseReference databaseReference;
     private Spinner spinnerMesas;
     private Button btnGuardarReserva;
 
@@ -53,7 +49,6 @@ public class ReservaFragment extends Fragment {
         etNombreCliente = view.findViewById(R.id.etNombreCliente);
         spinnerMesas = view.findViewById(R.id.spinnerMesas);
         btnGuardarReserva = view.findViewById(R.id.btnGuardarReserva);
-        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Configurar el adaptador para el Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(), R.array.mesas_array, android.R.layout.simple_spinner_item);
@@ -80,7 +75,7 @@ public class ReservaFragment extends Fragment {
                 // Obtener la lista de mesas seleccionadas
                 ArrayList<Integer> mesasSeleccionadas = getArguments().getIntegerArrayList(ARG_MESAS_SELECCIONADAS);
 
-                // Aquí puedes realizar la lógica para guardar la reserva y actualizar el estado en Firebase
+                // Aquí puedes realizar la lógica para guardar la reserva
                 guardarReserva(mesasSeleccionadas);
             }
         });
@@ -98,23 +93,7 @@ public class ReservaFragment extends Fragment {
             return;
         }
 
-        // Crear un nodo "reservas" en la base de datos
-        DatabaseReference reservasRef = databaseReference.child("mesas");
-
-        // Iterar sobre las mesas seleccionadas y agregar la información de la reserva
-        for (int numeroMesa : mesasSeleccionadas) {
-            String numeroMesaMostrar = formatearNumeroMesaMostrar(numeroMesa);
-            String numeroMesaBaseDatos = formatearNumeroMesaBaseDatos(numeroMesa);
-
-            // Crear una referencia para la reserva en la mesa específica
-            DatabaseReference reservaMesaRef = reservasRef.child("mesa_" + numeroMesaMostrar);
-
-            // Crear un objeto para almacenar la información de la reserva
-            Reserva reserva = new Reserva(nombreCliente, "Ocupado"); // Puedes crear una clase Reserva según tus necesidades
-
-            // Agregar la información de la reserva al nodo correspondiente
-            reservaMesaRef.setValue(reserva);
-        }
+        // Puedes simular la lógica de guardar la reserva aquí
 
         // Después de guardar la reserva, iniciar ActivityListaRestaurant
         startActivity(new Intent(getActivity(), ListaRestaurantActivity.class));
@@ -122,18 +101,4 @@ public class ReservaFragment extends Fragment {
         // Finalmente, cierra el fragmento actual
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
-
-    private String formatearNumeroMesaMostrar(int numeroMesa) {
-        // Mostrar sin formato para números del 1 al 9, y con formato para 10 en adelante
-        return numeroMesa >= 10 ? String.format("%02d", numeroMesa) : String.valueOf(numeroMesa);
-    }
-
-    private String formatearNumeroMesaBaseDatos(int numeroMesa) {
-        // Siempre utilizar formato para crear referencias en la base de datos
-        return String.format("%02d", numeroMesa);
-    }
-
-
-
-
 }
