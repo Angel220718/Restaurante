@@ -61,6 +61,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("androidx.annotation:annotation:1.3.0")
+    implementation ("com.android.support.constraint:constraint-layout:1.1.3")
 
 
     implementation("androidx.core:core-ktx:1.9.0")
