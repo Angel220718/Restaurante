@@ -7,9 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimary">#3F51B5</color>
     <color name="colorSelected">#FF4081</color>
     <color name="colorLibre">#00FF00</color> <!-- Verde -->
     <color name="colorOcupada">#005EFF</color> <!-- Rojo -->
+    <color name="colorPrimaryDark">@color/colorPrimary</color>
+    <color name="colorPrimary">#3F51B5</color>
+
+    <!-- Color accent -->
+    <color name="colorAccent">#FF4081</color>
 
 </resources>

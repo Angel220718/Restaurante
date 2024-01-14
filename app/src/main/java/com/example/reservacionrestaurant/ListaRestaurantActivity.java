@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.Query;
 
 
 public class ListaRestaurantActivity extends AppCompatActivity {
@@ -23,6 +20,7 @@ public class ListaRestaurantActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseFirestore mFirestore;
+
 
 
     @Override
@@ -39,6 +37,7 @@ public class ListaRestaurantActivity extends AppCompatActivity {
         Kfc = findViewById(R.id.Kfc);
         Mexican_food = findViewById(R.id.Mexican_food);
         cuenta = findViewById(R.id.cuenta);
+
 
 
         McDonald.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +70,7 @@ public class ListaRestaurantActivity extends AppCompatActivity {
         cuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ListaRestaurantActivity.this, Reservas_Activity.class));
+                startActivity(new Intent(ListaRestaurantActivity.this, CuentaActivity.class));
             }
         });
 

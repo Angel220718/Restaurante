@@ -254,6 +254,7 @@
                 android:layout_height="62dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
+                android:backgroundTint="#AE2E2E"
                 android:text="@string/cerrar_seccion" />
 
             <Button

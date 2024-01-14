@@ -96,8 +96,6 @@ public class MesaFragment extends Fragment {
             } else {
                 mesasSeleccionadas.add(numeroMesa);
 
-                // Guardar información en Firestore al seleccionar una mesa
-                guardarInformacionMesa(numeroMesa);
             }
 
             adapter.notifyDataSetChanged();
@@ -117,20 +115,6 @@ public class MesaFragment extends Fragment {
 
         return view;
     }
-
-    private void guardarInformacionMesa(int numeroMesa) {
-        // Formatear el número de mesa con ceros a la izquierda
-        String numeroMesaFormateado = String.format(Locale.getDefault(), "%03d", numeroMesa);
-
-        DocumentReference mesaDocument = mesasCollection.document("mesa_" + numeroMesaFormateado);
-        Mesa mesa = new Mesa("Ocupado", "", numeroMesa);
-
-        mesaDocument.set(mesa)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Mesa guardada correctamente"))
-                .addOnFailureListener(e -> Log.w(TAG, "Error al guardar la mesa", e));
-    }
-
-
 
     private void obtenerEstadosMesasDesdeFirebase(MesaAdapter adapter) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -250,7 +234,7 @@ public class MesaFragment extends Fragment {
                     iconoResId = R.mipmap.ic_mesa_rojo;
                     break;
                 default:
-                    iconoResId = R.mipmap.ic_mesa;
+                    iconoResId = R.mipmap.ic_mesa_rojo;
                     break;
             }
 
@@ -260,7 +244,6 @@ public class MesaFragment extends Fragment {
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(imageView);
 
-            // Aquí puedes personalizar aún más la apariencia según el estado
             if (mesasSeleccionadas.contains(numeroMesa)) {
                 imageView.setAlpha(0.5f);
             } else {

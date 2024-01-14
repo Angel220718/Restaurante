@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -29,6 +30,11 @@ public class Reservas_Activity extends AppCompatActivity {
 
         menu = findViewById(R.id.menu);
         imagenIdentificadora = findViewById(R.id.imagen_identificadora);
+        restauranteId = getIntent().getStringExtra("restaurante_id");
+        Log.d("Reservas_Activity", "ID del restaurante: " + restauranteId);
+
+
+
 
 
         Intent intent = getIntent();
