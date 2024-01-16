@@ -10,6 +10,9 @@ public class Reserva {
     private String horaReserva;
     private String estadoMesa; // Nuevo campo para el estado de la mesa
 
+    public Reserva() {
+    }
+
     // Constructor sin mesasSeleccionadas
     public Reserva(String nombreCliente) {
         this.nombreCliente = nombreCliente;
