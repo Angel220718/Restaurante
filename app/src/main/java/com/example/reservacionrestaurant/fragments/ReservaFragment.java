@@ -1,11 +1,7 @@
 package com.example.reservacionrestaurant.fragments;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,37 +10,34 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.example.reservacionrestaurant.CuentaActivity;
+import androidx.fragment.app.Fragment;
+
 import com.example.reservacionrestaurant.ListaRestaurantActivity;
 import com.example.reservacionrestaurant.R;
 import com.example.reservacionrestaurant.ReservasDetalleActivity;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 public class ReservaFragment extends Fragment {
 
-    private Reserva reserva;
 
+    private static final String TAG = "ReservaFragment";
     private EditText etNombreCliente;
     private Spinner spinnerMesas;
     private String restauranteId;
     private Button btnGuardarReserva;
 
-    private static final String ARG_MESAS_SELECCIONADAS = "mesas_seleccionadas";
+    private String nombreCliente;
 
-    private ArrayList<Integer> mesasSeleccionadas;
-    private FirebaseFirestore db;
+    private static final String ARG_MESAS_SELECCIONADAS = "mesas_seleccionadas";
 
     public ReservaFragment() {
         // Required empty public constructor
@@ -59,6 +52,11 @@ public class ReservaFragment extends Fragment {
         return fragment;
     }
 
+    public void setNombreCliente(String nombre) {
+        this.nombreCliente = nombre;
+        etNombreCliente.setText(nombre);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,8 +66,7 @@ public class ReservaFragment extends Fragment {
         spinnerMesas = view.findViewById(R.id.spinnerMesas);
         btnGuardarReserva = view.findViewById(R.id.btnGuardarReserva);
         restauranteId = getArguments().getString("restauranteId");
-        reserva = new Reserva("NombreCliente");
-        db = FirebaseFirestore.getInstance();
+
 
 
         // Configurar el adaptador para el Spinner
@@ -82,7 +79,6 @@ public class ReservaFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 int numeroMesa = position + 1;  // Suponiendo que la posición en el Spinner representa el número de la mesa
-                etNombreCliente.setText("Nombre del Cliente para mesa_" + numeroMesa);
             }
 
             @Override
@@ -94,34 +90,25 @@ public class ReservaFragment extends Fragment {
         btnGuardarReserva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Obtener el nombre del cliente
                 String nombreCliente = etNombreCliente.getText().toString().trim();
-
-                // Obtener la lista de mesas seleccionadas
                 ArrayList<Integer> mesasSeleccionadas = getArguments().getIntegerArrayList(ARG_MESAS_SELECCIONADAS);
 
-                // Verificar si hay al menos una mesa seleccionada
                 if (mesasSeleccionadas.isEmpty()) {
                     Toast.makeText(requireContext(), "Seleccione al menos una mesa.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Verificar si alguna de las mesas seleccionadas está ocupada
                 for (Integer numeroMesa : mesasSeleccionadas) {
                     String numeroMesaFormateado = String.format(Locale.getDefault(), "%03d", numeroMesa);
-                    DocumentReference mesaDocument = db.collection(restauranteId + "_mesas").document("mesa_" + numeroMesaFormateado);
+                    DocumentReference mesaDocument = FirebaseFirestore.getInstance().collection(restauranteId + "_mesas").document("mesa_" + numeroMesaFormateado);
 
-                    // Verificar si la mesa está ocupada
                     mesaDocument.get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            // Verificar el estado de la mesa
                             String estadoMesa = task.getResult().getString("estadoMesa");
 
                             if ("Ocupado".equals(estadoMesa)) {
-                                // Mesa ocupada, mostrar mensaje y salir
                                 Toast.makeText(requireContext(), "La mesa " + numeroMesa + " está ocupada. Seleccione otra mesa.", Toast.LENGTH_SHORT).show();
                             } else {
-                                // Mesa disponible, proceder con la reserva
                                 guardarReserva(restauranteId, nombreCliente, mesasSeleccionadas);
                             }
                         } else {
@@ -138,67 +125,57 @@ public class ReservaFragment extends Fragment {
     private void guardarReserva(String restauranteId, String nombreCliente, ArrayList<Integer> mesasSeleccionadas) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Verificar si hay al menos una mesa seleccionada
         if (mesasSeleccionadas.isEmpty()) {
             Toast.makeText(requireContext(), "Seleccione al menos una mesa.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Acumular las mesas ocupadas en un mensaje
         StringBuilder mesasOcupadasMensaje = new StringBuilder();
 
-        // Verificar el estado de cada mesa seleccionada
+        // Obtener el nombre del restaurante (puedes cambiar esto según cómo estén organizados tus datos)
+        String nombreRestaurante = obtenerNombreRestaurante(restauranteId);
+
         for (Integer numeroMesa : mesasSeleccionadas) {
             String numeroMesaFormateado = String.format(Locale.getDefault(), "%03d", numeroMesa);
             DocumentReference mesaDocument = db.collection(restauranteId + "_mesas").document("mesa_" + numeroMesaFormateado);
 
-            // Verificar si la mesa está ocupada
             mesaDocument.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    // Verificar el estado de la mesa
                     String estadoMesa = task.getResult().getString("estadoMesa");
 
                     if ("Ocupado".equals(estadoMesa)) {
-                        // Mesa ocupada, acumular en el mensaje
                         mesasOcupadasMensaje.append("mesa ").append(numeroMesa).append(", ");
                     }
 
-                    // Verificar si es la última mesa
                     if (mesasSeleccionadas.indexOf(numeroMesa) == mesasSeleccionadas.size() - 1) {
-                        // Mostrar mensaje de mesas ocupadas si es necesario
                         if (mesasOcupadasMensaje.length() > 0) {
-                            mesasOcupadasMensaje.deleteCharAt(mesasOcupadasMensaje.length() - 2); // Eliminar la última coma y el espacio
+                            mesasOcupadasMensaje.deleteCharAt(mesasOcupadasMensaje.length() - 2);
                             Toast.makeText(requireContext(), "La(s) " + mesasOcupadasMensaje + " están ocupadas. Seleccione otras mesas.", Toast.LENGTH_SHORT).show();
                         } else {
-                            // Todas las mesas están disponibles, proceder con la reserva
-
-                            // Crear una única reserva que incluya todas las mesas seleccionadas
                             StringBuilder nombreReserva = new StringBuilder("Reserva para:  ");
 
                             for (Integer mesa : mesasSeleccionadas) {
                                 nombreReserva.append("mesa_").append(mesa).append(", ");
                             }
 
-                            nombreReserva.deleteCharAt(nombreReserva.length() - 2); // Eliminar la última coma y el espacio
+                            nombreReserva.deleteCharAt(nombreReserva.length() - 2);
 
-                            // Asegúrate de que la reserva tenga un identificador único, por ejemplo, la combinación de las mesas seleccionadas
                             String reservaId = nombreReserva.toString().replace(" ", "_");
 
                             Reserva reserva = new Reserva(nombreCliente);
-                            reserva.setMesasSeleccionadas(mesasSeleccionadas, "Ocupado"); // Cambiar a "Ocupado"
+                            reserva.setMesasSeleccionadas(mesasSeleccionadas, "Ocupado");
+                            reserva.setNombreRestaurante(restauranteId);
+                            reserva.setFechaReserva(obtenerFechaActual());  // Puedes utilizar un método para obtener la fecha actual
+                            reserva.setHoraReserva(obtenerHoraActual());
 
-                            // Guardar la reserva
+
                             db.collection(restauranteId + "_reservas").document(reservaId)
                                     .set(reserva)
                                     .addOnSuccessListener(documentReference -> {
-                                        // Éxito al guardar la reserva
-
-                                        // Actualizar el estado de todas las mesas a "Ocupado"
                                         actualizarEstadoMesas(restauranteId, mesasSeleccionadas, "Ocupado");
 
                                         Toast.makeText(requireContext(), nombreReserva + " guardada con éxito", Toast.LENGTH_SHORT).show();
 
-                                        // Después de guardar la reserva, puedes iniciar ActivityListaRestaurant
                                         startActivity(new Intent(getActivity(), ListaRestaurantActivity.class));
 
                                         Intent intent = new Intent(getActivity(), ReservasDetalleActivity.class);
@@ -209,11 +186,9 @@ public class ReservaFragment extends Fragment {
                                         intent.putExtra("horaReserva", reserva.getHoraReserva());
                                         startActivity(intent);
 
-                                        // Finalmente, cierra el fragmento actual
-                                        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+                                        getActivity().getSupportFragmentManager().beginTransaction().remove(ReservaFragment.this).commit();
                                     })
                                     .addOnFailureListener(e -> {
-                                        // Error al guardar la reserva
                                         Toast.makeText(requireContext(), "Error al guardar la reserva", Toast.LENGTH_SHORT).show();
                                         e.printStackTrace();
                                     });
@@ -226,6 +201,40 @@ public class ReservaFragment extends Fragment {
         }
     }
 
+    // Método para obtener el nombre del restaurante según el ID (puedes personalizar esto según tu estructura de datos)
+    private String obtenerNombreRestaurante(String restauranteId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Suponiendo que tienes una colección llamada "restaurantes"
+        DocumentReference restauranteDocument = db.collection(restauranteId).document(restauranteId);
+
+        restauranteDocument.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String nombreRestaurante = task.getResult().getString("nombreRestaurante");
+                // Aquí puedes usar el nombre del restaurante según tus necesidades
+                Log.d(TAG, "Nombre del restaurante obtenido: " + nombreRestaurante);
+            } else {
+                Log.e(TAG, "Error al obtener el nombre del restaurante para " + restauranteId, task.getException());
+            }
+        });
+
+        // Puedes devolver un valor predeterminado o null en caso de error
+        return "Nombre del Restaurante Predeterminado";
+    }
+
+
+    // Método para obtener la fecha actual (puedes personalizar esto según tus necesidades)
+    private String obtenerFechaActual() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+    private String obtenerHoraActual() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return timeFormat.format(date);
+    }
 
 
     private void actualizarEstadoMesas(String restauranteId, ArrayList<Integer> mesasSeleccionadas, String estado) {
@@ -238,11 +247,6 @@ public class ReservaFragment extends Fragment {
 
         for (Integer numeroMesa : mesasSeleccionadas) {
             String numeroMesaFormateado = String.format(Locale.getDefault(), "%03d", numeroMesa);
-
-            // Añadir logs para verificar valores
-            Log.d(TAG, "restauranteId: " + restauranteId);
-            Log.d(TAG, "numeroMesaFormateado: " + numeroMesaFormateado);
-
             DocumentReference mesaDocument = db.collection(restauranteId + "_mesas").document("mesa_" + numeroMesaFormateado);
 
             mesaDocument.update("estadoMesa", estado)
@@ -253,8 +257,5 @@ public class ReservaFragment extends Fragment {
                         Log.e(TAG, "Error al actualizar el estado de la mesa para mesa_" + numeroMesa, e);
                     });
         }
-
-
     }
-
 }

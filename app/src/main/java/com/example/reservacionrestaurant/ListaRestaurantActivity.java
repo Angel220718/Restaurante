@@ -70,7 +70,7 @@ public class ListaRestaurantActivity extends AppCompatActivity {
         cuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ListaRestaurantActivity.this, CuentaActivity.class));
+                startActivity(new Intent(ListaRestaurantActivity.this, SeleccionarRestaurantActivity.class));
             }
         });
 

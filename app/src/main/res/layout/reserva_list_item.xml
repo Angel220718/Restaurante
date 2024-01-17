@@ -1,0 +1,54 @@
+<!-- res/layout/reserva_list_item.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/nombreRestauranteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="Nombre del Restaurante: " />
+
+    <TextView
+        android:id="@+id/nombreClienteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="Nombre del Cliente:" />
+
+    <TextView
+        android:id="@+id/mesasSeleccionadasTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="Mesas Seleccionadas:" />
+
+    <TextView
+        android:id="@+id/fechaReservaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="Fecha de Reserva:" />
+
+    <TextView
+        android:id="@+id/horaReservaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="Hora de Reserva:" />
+
+    <Button
+        android:id="@+id/btnEliminarReserva"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
+</LinearLayout>

@@ -13,6 +13,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".SeleccionarRestaurantActivity"
+            android:exported="false" />
+        <activity
             android:name=".ReservasDetalleActivity"
             android:exported="false" />
         <activity

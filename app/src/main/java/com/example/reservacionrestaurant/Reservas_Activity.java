@@ -1,15 +1,15 @@
 package com.example.reservacionrestaurant;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.reservacionrestaurant.fragments.MesaFragment;
 import com.example.reservacionrestaurant.fragments.ReservaFragment;
@@ -32,10 +32,6 @@ public class Reservas_Activity extends AppCompatActivity {
         imagenIdentificadora = findViewById(R.id.imagen_identificadora);
         restauranteId = getIntent().getStringExtra("restaurante_id");
         Log.d("Reservas_Activity", "ID del restaurante: " + restauranteId);
-
-
-
-
 
         Intent intent = getIntent();
         if (intent != null) {
