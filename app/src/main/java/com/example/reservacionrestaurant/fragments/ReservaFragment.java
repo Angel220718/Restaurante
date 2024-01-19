@@ -35,12 +35,10 @@ public class ReservaFragment extends Fragment {
     private String restauranteId;
     private Button btnGuardarReserva;
 
-    private String nombreCliente;
 
     private static final String ARG_MESAS_SELECCIONADAS = "mesas_seleccionadas";
 
     public ReservaFragment() {
-        // Required empty public constructor
     }
 
     public static ReservaFragment newInstance(ArrayList<Integer> mesasSeleccionadas, String restauranteId) {
@@ -52,10 +50,6 @@ public class ReservaFragment extends Fragment {
         return fragment;
     }
 
-    public void setNombreCliente(String nombre) {
-        this.nombreCliente = nombre;
-        etNombreCliente.setText(nombre);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,22 +62,18 @@ public class ReservaFragment extends Fragment {
         restauranteId = getArguments().getString("restauranteId");
 
 
-
-        // Configurar el adaptador para el Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(), R.array.mesas_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMesas.setAdapter(adapter);
 
-        // Agregar un escucha al Spinner para manejar la selección
         spinnerMesas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                int numeroMesa = position + 1;  // Suponiendo que la posición en el Spinner representa el número de la mesa
+                int numeroMesa = position + 1;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Aquí puedes manejar el caso en que no se selecciona nada
             }
         });
 
@@ -132,7 +122,6 @@ public class ReservaFragment extends Fragment {
 
         StringBuilder mesasOcupadasMensaje = new StringBuilder();
 
-        // Obtener el nombre del restaurante (puedes cambiar esto según cómo estén organizados tus datos)
         String nombreRestaurante = obtenerNombreRestaurante(restauranteId);
 
         for (Integer numeroMesa : mesasSeleccionadas) {
@@ -165,7 +154,7 @@ public class ReservaFragment extends Fragment {
                             Reserva reserva = new Reserva(nombreCliente);
                             reserva.setMesasSeleccionadas(mesasSeleccionadas, "Ocupado");
                             reserva.setNombreRestaurante(restauranteId);
-                            reserva.setFechaReserva(obtenerFechaActual());  // Puedes utilizar un método para obtener la fecha actual
+                            reserva.setFechaReserva(obtenerFechaActual());
                             reserva.setHoraReserva(obtenerHoraActual());
 
 
@@ -201,29 +190,25 @@ public class ReservaFragment extends Fragment {
         }
     }
 
-    // Método para obtener el nombre del restaurante según el ID (puedes personalizar esto según tu estructura de datos)
+
     private String obtenerNombreRestaurante(String restauranteId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Suponiendo que tienes una colección llamada "restaurantes"
         DocumentReference restauranteDocument = db.collection(restauranteId).document(restauranteId);
 
         restauranteDocument.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 String nombreRestaurante = task.getResult().getString("nombreRestaurante");
-                // Aquí puedes usar el nombre del restaurante según tus necesidades
+
                 Log.d(TAG, "Nombre del restaurante obtenido: " + nombreRestaurante);
             } else {
                 Log.e(TAG, "Error al obtener el nombre del restaurante para " + restauranteId, task.getException());
             }
         });
 
-        // Puedes devolver un valor predeterminado o null en caso de error
         return "Nombre del Restaurante Predeterminado";
     }
 
-
-    // Método para obtener la fecha actual (puedes personalizar esto según tus necesidades)
     private String obtenerFechaActual() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();

@@ -39,11 +39,11 @@ public class Reservas_Activity extends AppCompatActivity {
             restauranteId = intent.getStringExtra("restaurante_id");
 
             if ("McDonald".equals(restauranteId)) {
-                imagenIdentificadora.setImageResource(R.drawable.logo_mdonal2);
+                imagenIdentificadora.setImageResource(R.drawable.buffetkindom);
             } else if ("Mexican_food".equals(restauranteId)) {
-                imagenIdentificadora.setImageResource(R.drawable.logo_mexican);
+                imagenIdentificadora.setImageResource(R.drawable.rukito);
             } else if ("Kfc".equals(restauranteId)) {
-                imagenIdentificadora.setImageResource(R.drawable.logo_kfc);
+                imagenIdentificadora.setImageResource(R.drawable.fritamoro);
             }
 
             // Pasa la información del restaurante al fragmento MesaFragment

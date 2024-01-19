@@ -99,16 +99,11 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            // El usuario está autenticado, realiza las acciones necesarias
-            // Por ejemplo, puedes obtener el nombre del usuario aquí
             obtenerNombreUsuarioActual();
 
-            // Luego, inicia la actividad y finaliza MainActivity
             startActivity(new Intent(MainActivity.this, ListaRestaurantActivity.class));
             finish();
         } else {
-            // Si no hay un usuario autenticado, realiza otras acciones necesarias
-            // Por ejemplo, puedes mostrar la interfaz de inicio de sesión o realizar otras operaciones.
         }
     }
 
@@ -123,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             String nombreUsuario = task.getResult().getString("Nombre");
-                            // Puedes hacer lo que necesites con el nombre de usuario
-                            // Por ejemplo, mostrarlo en un TextView o realizar otras operaciones
                         } else {
                             Log.e(TAG, "Error al obtener el nombre de usuario", task.getException());
                         }

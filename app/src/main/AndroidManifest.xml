@@ -22,9 +22,6 @@
             android:name=".CuentaActivity"
             android:exported="false" />
         <activity
-            android:name=".MesaActivity"
-            android:exported="false" />
-        <activity
             android:name=".Reservas_Activity"
             android:exported="false" />
         <activity
