@@ -92,7 +92,6 @@ public class MesaFragment extends Fragment {
                 mesasSeleccionadas.remove(Integer.valueOf(numeroMesa));
             } else {
                 mesasSeleccionadas.add(numeroMesa);
-
             }
 
             adapter.notifyDataSetChanged();
@@ -107,11 +106,52 @@ public class MesaFragment extends Fragment {
             transaction.commit();
         });
 
+//        Button btnCrearColeccion = view.findViewById(R.id.btnCrearColeccion);
+//        btnCrearColeccion.setOnClickListener(v -> {
+//            // Código para crear la colección restaurantId_mesas
+//            crearColeccionMesas();
+//        });
+
         // Obtener y actualizar los estados de las mesas desde Firebase
         obtenerEstadosMesasDesdeFirebase(adapter);
 
         return view;
     }
+
+//    private void crearColeccionMesas() {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+//        // Verificar si la colección ya existe antes de intentar crearla nuevamente
+//        db.collection(restauranteId + "_mesas")
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful() && task.getResult().isEmpty()) {
+//                        // La colección no existe, así que procedemos a crearla
+//                        for (int i = 1; i <= 32; i++) {
+//                            String numeroMesaFormateado = String.format(Locale.getDefault(), "%03d", i);
+//                            Map<String, Object> mesaData = new HashMap<>();
+//                            mesaData.put("estadoMesa", "Libre");
+//                            mesaData.put("informacionAdicional", "");
+//                            mesaData.put("numeroMesa", i);
+//
+//                            db.collection(restauranteId + "_mesas").document("mesa_" + numeroMesaFormateado)
+//                                    .set(mesaData)
+//                                    .addOnSuccessListener(aVoid -> {
+//                                        Toast.makeText(requireContext(), "Documento mesa_" + numeroMesaFormateado + " creado con éxito.", Toast.LENGTH_SHORT).show();
+//                                    })
+//                                    .addOnFailureListener(e -> {
+//                                        Toast.makeText(requireContext(), "Error al crear el documento mesa_" + numeroMesaFormateado, Toast.LENGTH_SHORT).show();
+//                                        Log.e(TAG, "Error al crear el documento mesa_" + numeroMesaFormateado, e);
+//                                    });
+//                        }
+//                    } else {
+//                        // La colección ya existe
+//                        Toast.makeText(requireContext(), "La colección restaurantId_mesas ya existe.", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//
+//}
 
     private void obtenerEstadosMesasDesdeFirebase(MesaAdapter adapter) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -149,7 +189,6 @@ public class MesaFragment extends Fragment {
                             }
                         });
 
-
                         adapter.setEstadosMesas(estadosMesas);
                     } else {
                         Exception exception = task.getException();
@@ -159,7 +198,6 @@ public class MesaFragment extends Fragment {
                     }
                 });
     }
-
 
     private static class MesaAdapter extends BaseAdapter {
         private final int[] listaIconosMesas;
@@ -210,7 +248,6 @@ public class MesaFragment extends Fragment {
             return imageView;
         }
 
-
         private String obtenerEstadoMesa(int numeroMesa) {
             if (estadosMesas == null || estadosMesas.isEmpty() || numeroMesa <= 0 || numeroMesa > estadosMesas.size()) {
                 return "Ocupado";
@@ -218,7 +255,6 @@ public class MesaFragment extends Fragment {
 
             return estadosMesas.get(numeroMesa - 1);
         }
-
 
         private void actualizarColorDeFondo(String estadoMesa, ImageView imageView, int numeroMesa) {
             int iconoResId;
@@ -247,7 +283,5 @@ public class MesaFragment extends Fragment {
                 imageView.setAlpha(1.0f);
             }
         }
-
-
     }
 }

@@ -16,8 +16,7 @@
     <Space
         android:id="@+id/space"
         android:layout_width="wrap_content"
-        android:layout_height="10dp"
-        android:layout_above="@+id/btnIrAReserva" />
+        android:layout_height="10dp" />
 
     <Button
         android:id="@+id/btnIrAReserva"
@@ -27,5 +26,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="0dp"
         android:text="Ir a Reserva" />
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btnCrearColeccion"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:layout_marginBottom="0dp"-->
+    <!--        android:text="Crear Colección Temporal" />-->
+
 
 </RelativeLayout>

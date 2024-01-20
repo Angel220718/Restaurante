@@ -6,11 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -26,12 +23,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+
 public class ReservaFragment extends Fragment {
-
-
     private static final String TAG = "ReservaFragment";
     private EditText etNombreCliente;
-    private Spinner spinnerMesas;
     private String restauranteId;
     private Button btnGuardarReserva;
 
@@ -50,32 +45,15 @@ public class ReservaFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reserva, container, false);
 
         etNombreCliente = view.findViewById(R.id.etNombreCliente);
-        spinnerMesas = view.findViewById(R.id.spinnerMesas);
         btnGuardarReserva = view.findViewById(R.id.btnGuardarReserva);
         restauranteId = getArguments().getString("restauranteId");
 
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(), R.array.mesas_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMesas.setAdapter(adapter);
-
-        spinnerMesas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                int numeroMesa = position + 1;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-            }
-        });
 
         btnGuardarReserva.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,7 +168,6 @@ public class ReservaFragment extends Fragment {
         }
     }
 
-
     private String obtenerNombreRestaurante(String restauranteId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -221,7 +198,6 @@ public class ReservaFragment extends Fragment {
         return timeFormat.format(date);
     }
 
-
     private void actualizarEstadoMesas(String restauranteId, ArrayList<Integer> mesasSeleccionadas, String estado) {
         if (mesasSeleccionadas == null || mesasSeleccionadas.isEmpty()) {
             Log.w(TAG, "Lista de mesas seleccionadas es nula o vacía");
@@ -243,4 +219,5 @@ public class ReservaFragment extends Fragment {
                     });
         }
     }
+
 }

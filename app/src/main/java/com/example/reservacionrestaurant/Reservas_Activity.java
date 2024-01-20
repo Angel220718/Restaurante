@@ -38,11 +38,11 @@ public class Reservas_Activity extends AppCompatActivity {
 
             restauranteId = intent.getStringExtra("restaurante_id");
 
-            if ("McDonald".equals(restauranteId)) {
+            if ("Buffet Kingdom".equals(restauranteId)) {
                 imagenIdentificadora.setImageResource(R.drawable.buffetkindom);
-            } else if ("Mexican_food".equals(restauranteId)) {
+            } else if ("Rukito".equals(restauranteId)) {
                 imagenIdentificadora.setImageResource(R.drawable.rukito);
-            } else if ("Kfc".equals(restauranteId)) {
+            } else if ("Fritamoro".equals(restauranteId)) {
                 imagenIdentificadora.setImageResource(R.drawable.fritamoro);
             }
 

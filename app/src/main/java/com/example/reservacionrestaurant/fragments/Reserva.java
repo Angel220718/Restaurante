@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Reserva {
     private static int contadorReservas = 0; // Variable estática para el conteo de reservas
 
-    private int id;
+    private String id; // Cambiado a tipo String
 
 
     private String NombreRestaurante;
@@ -18,8 +18,14 @@ public class Reserva {
     public Reserva() {
         // Incrementar el contador y asignar como ID
         contadorReservas++;
-        this.id = contadorReservas;
+        this.id = String.valueOf(contadorReservas);
     }
+
+    public Reserva(String id, String nombreCliente) {
+        this.id = id;
+        this.nombreCliente = nombreCliente;
+    }
+
 
     // Constructor sin mesasSeleccionadas
     public Reserva(String nombreCliente) {
@@ -27,7 +33,7 @@ public class Reserva {
         this.mesasSeleccionadas = new ArrayList<>();
         // Incrementar el contador y asignar como ID
         contadorReservas++;
-        this.id = contadorReservas;
+        this.id = String.valueOf(contadorReservas);
     }
 
     // Método para actualizar las mesas seleccionadas y su estado
@@ -36,7 +42,7 @@ public class Reserva {
         this.estadoMesa = estadoMesa;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -87,4 +93,9 @@ public class Reserva {
     public void setNombreRestaurante(String nombreRestaurante) {
         NombreRestaurante = nombreRestaurante;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

@@ -11,33 +11,24 @@
         android:layout_height="wrap_content"
         android:hint="Nombre del Cliente" />
 
-    <Spinner
-        android:id="@+id/spinnerMesas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
-
-    <!-- Añadir elementos para mostrar información adicional -->
     <TextView
         android:id="@+id/tvNombreRestaurante"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Nombre del Restaurante: " />
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/tvHoraReserva"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Hora de Reserva: " />
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/tvFechaReserva"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Fecha de Reserva: " />
+        android:text=" " />
 
     <Button
         android:id="@+id/btnGuardarReserva"

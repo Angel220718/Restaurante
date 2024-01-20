@@ -44,7 +44,7 @@ public class ListaRestaurantActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ListaRestaurantActivity.this, Reservas_Activity.class);
-                intent.putExtra("restaurante_id", "McDonald");
+                intent.putExtra("restaurante_id", "Buffet Kingdom");
                 startActivity(intent);
             }
         });
@@ -53,7 +53,7 @@ public class ListaRestaurantActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ListaRestaurantActivity.this, Reservas_Activity.class);
-                intent.putExtra("restaurante_id", "Mexican_food");
+                intent.putExtra("restaurante_id", "Fritamoro");
                 startActivity(intent);
             }
             });
@@ -62,8 +62,8 @@ public class ListaRestaurantActivity extends AppCompatActivity {
             @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ListaRestaurantActivity.this, Reservas_Activity.class);
-                    intent.putExtra("restaurante_id", "Kfc");
-                    startActivity(intent);
+                intent.putExtra("restaurante_id", "Rukito");
+                startActivity(intent);
                 }
             });
 

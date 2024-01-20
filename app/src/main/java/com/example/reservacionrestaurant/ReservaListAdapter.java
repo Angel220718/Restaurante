@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
     private final Context context;
     private final List<Reserva> reservasList;
     private ReservaListAdapterListener listener;
+
 
     public ReservaListAdapter(Context context, List<Reserva> reservasList) {
         super(context, R.layout.reserva_list_item, reservasList);
@@ -34,6 +36,18 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
         this.listener = listener;
     }
 
+    public interface OnReservaDeleteListener {
+        void onReservaDelete(Reserva reserva);
+    }
+
+    // Variable para almacenar el listener
+    private OnReservaDeleteListener deleteListener;
+
+    // Método para establecer el listener
+    public void setOnReservaDeleteListener(OnReservaDeleteListener listener) {
+        this.deleteListener = listener;
+    }
+
 
     @NonNull
     @Override
@@ -48,6 +62,7 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
         TextView mesasSeleccionadasTextView = rowView.findViewById(R.id.mesasSeleccionadasTextView);
         TextView fechaReservaTextView = rowView.findViewById(R.id.fechaReservaTextView);
         TextView horaReservaTextView = rowView.findViewById(R.id.horaReservaTextView);
+        Button eliminarReserva = rowView.findViewById(R.id.btnEliminarReserva);
 
         // Obtener el objeto Reserva para la posición actual
         Reserva reserva = reservasList.get(position);
@@ -59,9 +74,22 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
         fechaReservaTextView.setText("Fecha de Reserva: " + reserva.getFechaReserva());
         horaReservaTextView.setText("Hora de Reserva: " + reserva.getHoraReserva());
 
+        eliminarReserva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eliminarReserva(position);
+            }
+        });
+
 
         return rowView;
 
 
+    }
+
+    private void eliminarReserva(int position) {
+        if (deleteListener != null) {
+            deleteListener.onReservaDelete(getItem(position));
+        }
     }
 }
