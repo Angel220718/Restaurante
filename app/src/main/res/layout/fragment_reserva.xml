@@ -5,11 +5,12 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
+    <TextView
         android:id="@+id/etNombreCliente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre del Cliente" />
+        android:textAlignment="center"
+        android:textSize="12sp" />
 
     <EditText
         android:id="@+id/etFechaReserva"

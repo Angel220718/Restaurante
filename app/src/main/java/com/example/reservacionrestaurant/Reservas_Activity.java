@@ -1,5 +1,8 @@
 package com.example.reservacionrestaurant;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +25,10 @@ public class Reservas_Activity extends AppCompatActivity {
     ImageView imagenIdentificadora;
     BottomNavigationView menu;
     String restauranteId;
+    String horaDisponible;
+    String nombreUsuario;
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +37,9 @@ public class Reservas_Activity extends AppCompatActivity {
         menu = findViewById(R.id.menu);
         imagenIdentificadora = findViewById(R.id.imagen_identificadora);
         restauranteId = getIntent().getStringExtra("restaurante_id");
-        Log.d("Reservas_Activity", "ID del restaurante: " + restauranteId);
+        horaDisponible = getIntent().getStringExtra("horaDisponible");
+        nombreUsuario = getIntent().getStringExtra("nombreUsuario");
+        Log.e(TAG, "reservaActivity nombre de usuario " + nombreUsuario);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -56,7 +64,7 @@ public class Reservas_Activity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.Reserva) {
-                    mostrarFragment(ReservaFragment.newInstance(new ArrayList<>(), restauranteId));
+                    mostrarFragment(ReservaFragment.newInstance(new ArrayList<>(), restauranteId, horaDisponible, nombreUsuario));
                 }
                 if (menuItem.getItemId() == R.id.Mesa) {
                     // Pasa la información del restaurante al fragmento MesaFragment

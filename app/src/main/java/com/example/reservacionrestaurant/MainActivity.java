@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -75,13 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void userValidacion(String usuario, String password) {
         mAuth.signInWithEmailAndPassword(usuario, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    startActivity(new Intent(MainActivity.this, ListaRestaurantActivity.class));
-                    Toast.makeText(MainActivity.this, "** Bienvenido **", Toast.LENGTH_SHORT).show();
-                    finish();
-                }else{
+                if (task.isSuccessful()) {
+                    obtenerNombresDeUsuarios();
+                } else {
                     Toast.makeText(MainActivity.this, "** Error **", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -91,15 +91,62 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Llene datos validos", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
+
+    @SuppressLint("RestrictedApi")
+    private void obtenerNombresDeUsuarios() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            FirebaseFirestore.getInstance().collection("Usuarios")
+                    .document(userId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String nombreUsuario = document.getString("Nombre");
+                                if (nombreUsuario != null) {
+                                    Log.d(TAG, "Nombre de usuario: " + nombreUsuario);
+
+                                    // Aquí inicia el nuevo Activity
+                                    iniciarNuevoActivity(nombreUsuario);
+                                }
+                            } else {
+                                Log.e(TAG, "No se encontró el documento del usuario con ID: " + userId);
+                            }
+                        } else {
+                            Log.e(TAG, "Error al obtener el nombre de usuario", task.getException());
+                        }
+                    });
+        } else {
+            Log.e(TAG, "No se pudo obtener el usuario actual");
+        }
+    }
+
+    private void iniciarNuevoActivity(String nombreUsuario) {
+        // Aquí creas un Intent para el nuevo Activity
+        Intent intent = new Intent(MainActivity.this, ListaRestaurantActivity.class);
+
+        // Puedes agregar datos adicionales al Intent si es necesario
+        intent.putExtra("nombreUsuario", nombreUsuario);
+
+        // Inicias el nuevo Activity
+        startActivity(intent);
+
+        // Cierras el Activity actual
+        finish();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            obtenerNombreUsuarioActual();
+            obtenerNombresDeUsuarios();
 
             startActivity(new Intent(MainActivity.this, ListaRestaurantActivity.class));
             finish();
@@ -107,21 +154,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("RestrictedApi")
-    private void obtenerNombreUsuarioActual() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
-            FirebaseFirestore.getInstance().collection("Usuarios").document(userId)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            String nombreUsuario = task.getResult().getString("Nombre");
-                        } else {
-                            Log.e(TAG, "Error al obtener el nombre de usuario", task.getException());
-                        }
-                    });
-        }
-    }
 }

@@ -27,16 +27,6 @@
         android:layout_marginTop="8dp"/>
 
     <TextView
-        android:id="@+id/tvFechaReserva"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fecha de Reserva"
-        app:layout_constraintTop_toBottomOf="@id/tvNombreCliente"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
-
-    <TextView
         android:id="@+id/tvMesasReservadas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,6 +44,16 @@
         app:layout_constraintTop_toBottomOf="@id/tvMesasReservadas"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/tvFechaReserva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Fecha de Reserva"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNombreCliente" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

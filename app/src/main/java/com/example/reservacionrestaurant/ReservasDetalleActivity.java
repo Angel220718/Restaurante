@@ -30,7 +30,7 @@ public class ReservasDetalleActivity extends AppCompatActivity {
 
         tvNombreRestaurante.setText(nombreReserva);
         tvNombreCliente.setText("Nombre del Cliente: " + nombreCliente);
-        tvFechaReserva.setText("Fecha de Reserva: " + fechadeReserva);
+
 
         if (mesasSeleccionadas != null) {
             StringBuilder mesasReservadas = new StringBuilder("Mesas Reservadas: ");
@@ -42,7 +42,7 @@ public class ReservasDetalleActivity extends AppCompatActivity {
         } else {
             tvMesasReservadas.setText("Mesas Reservadas: (sin mesas seleccionadas)");
         }
-
+        tvFechaReserva.setText("Fecha de Reserva: " + fechadeReserva);
         tvHoraReserva.setText("Hora de Reserva: " + horadeReserva);
     }
 }

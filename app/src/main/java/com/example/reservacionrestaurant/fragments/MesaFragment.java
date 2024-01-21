@@ -36,6 +36,8 @@ public class MesaFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private String restauranteId;
+    private String nombreUsuario;
+    private String horaDisponible;
 
     public static MesaFragment newInstance(String param1, String param2, String restauranteId) {
         MesaFragment fragment = new MesaFragment();
@@ -99,7 +101,8 @@ public class MesaFragment extends Fragment {
 
         Button btnIrAReserva = view.findViewById(R.id.btnIrAReserva);
         btnIrAReserva.setOnClickListener(v -> {
-            ReservaFragment reservaFragment = ReservaFragment.newInstance(new ArrayList<>(mesasSeleccionadas), restauranteId);
+
+            ReservaFragment reservaFragment = ReservaFragment.newInstance(new ArrayList<>(mesasSeleccionadas), restauranteId, horaDisponible, nombreUsuario);
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.container, reservaFragment);
             transaction.addToBackStack(null);

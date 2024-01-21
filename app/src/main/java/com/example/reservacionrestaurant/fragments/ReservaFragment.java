@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,8 +33,11 @@ import java.util.Locale;
 
 public class ReservaFragment extends Fragment {
     private static final String TAG = "ReservaFragment";
-    private EditText etNombreCliente;
+    private TextView etNombreCliente;
     private String restauranteId;
+    private String horaDisponible;
+    private static String nombreUsuario;
+
     private Button btnGuardarReserva;
 
     private EditText etFechaReserva;
@@ -41,11 +48,14 @@ public class ReservaFragment extends Fragment {
     public ReservaFragment() {
     }
 
-    public static ReservaFragment newInstance(ArrayList<Integer> mesasSeleccionadas, String restauranteId) {
+    public static ReservaFragment newInstance(ArrayList<Integer> mesasSeleccionadas, String restauranteId, String horaDisponible, String nombreUsuario) {
         ReservaFragment fragment = new ReservaFragment();
         Bundle args = new Bundle();
         args.putIntegerArrayList(ARG_MESAS_SELECCIONADAS, mesasSeleccionadas);
         args.putString("restauranteId", restauranteId);
+        args.putString("horaDisponible", horaDisponible);
+        args.putString("nombreUsuario", nombreUsuario);
+        Log.e(TAG, "reservafrag usuario actual1 " + nombreUsuario);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,22 +68,26 @@ public class ReservaFragment extends Fragment {
         etNombreCliente = view.findViewById(R.id.etNombreCliente);
         btnGuardarReserva = view.findViewById(R.id.btnGuardarReserva);
         restauranteId = getArguments().getString("restauranteId");
+
         etFechaReserva = view.findViewById(R.id.etFechaReserva);
         etHoraReserva = view.findViewById(R.id.etHoraReserva);
+        horaDisponible = ReservaUtil.getHoraDisponible();
+        nombreUsuario = NombreObtenido.getNombreo();
+        Log.e(TAG, "reservafrag usuario actual2 " + nombreUsuario);
+        etNombreCliente.setText("Selecione una fecha y hora para su Reserva Sr(a): " + nombreUsuario);
 
         // Verificar si los EditText se han inicializado correctamente
         if (etFechaReserva == null || etHoraReserva == null) {
-            Log.e(TAG, "Error: EditText no se ha inicializado correctamente.");
             return view;
         }
-
-        // ...
 
         etFechaReserva.setOnClickListener(v -> mostrarDatePicker());
         etHoraReserva.setOnClickListener(v -> mostrarTimePicker());
 
         btnGuardarReserva.setOnClickListener(v -> {
-            String nombreCliente = etNombreCliente.getText().toString().trim();
+
+            String nombreCliente = getArguments().getString(nombreUsuario);
+            Log.e(TAG, "btn" + nombreUsuario);
             ArrayList<Integer> mesasSeleccionadas = getArguments().getIntegerArrayList(ARG_MESAS_SELECCIONADAS);
 
             if (mesasSeleccionadas.isEmpty()) {
@@ -92,10 +106,10 @@ public class ReservaFragment extends Fragment {
                         if ("Ocupado".equals(estadoMesa)) {
                             Toast.makeText(requireContext(), "La mesa " + numeroMesa + " está ocupada. Seleccione otra mesa.", Toast.LENGTH_SHORT).show();
                         } else {
-                            guardarReserva(restauranteId, nombreCliente, mesasSeleccionadas);
+                            guardarReserva(restauranteId, nombreUsuario, mesasSeleccionadas);
+                            Log.e(TAG, "usuarui 23423" + nombreUsuario + " " + nombreCliente);
                         }
                     } else {
-                        Log.e(TAG, "Error al obtener el estado de la mesa para mesa_" + numeroMesa, task.getException());
                     }
                 });
             }
@@ -140,7 +154,14 @@ public class ReservaFragment extends Fragment {
                 (view, hourOfDay, minute) -> {
                     // Procesar la hora seleccionada
                     String horaSeleccionada = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
-                    etHoraReserva.setText(horaSeleccionada);
+
+                    // Verificar si la hora seleccionada está dentro del rango permitido
+                    if (verificarHoraDisponible(horaSeleccionada)) {
+                        etHoraReserva.setText(horaSeleccionada);
+                    } else {
+                        Toast.makeText(requireContext(), "Seleccione una hora válida dentro del rango: " + horaDisponible, Toast.LENGTH_SHORT).show();
+                        // Puedes mostrar el TimePickerDialog nuevamente o tomar otras medidas según tus requisitos
+                    }
                 },
                 horaActual, minutoActual, true);
 
@@ -150,6 +171,29 @@ public class ReservaFragment extends Fragment {
         // Devolver la hora seleccionada
         return etHoraReserva.getText().toString();
     }
+
+    private boolean verificarHoraDisponible(String horaSeleccionada) {
+        try {
+
+            // Obtener las horas de inicio y fin desde horaDisponible
+            String[] horasDisponible = horaDisponible.split(" - ");
+            String horaInicio = horasDisponible[0].trim();
+            String horaFin = horasDisponible[1].trim();
+
+
+            // Convertir las horas a objetos LocalTime
+            LocalTime horaSeleccionadaObj = LocalTime.parse(horaSeleccionada, DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()));
+            LocalTime horaInicioObj = LocalTime.parse(horaInicio, DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()));
+            LocalTime horaFinObj = LocalTime.parse(horaFin, DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()));
+
+            // Verificar si la hora seleccionada está dentro del rango
+            return !horaSeleccionadaObj.isBefore(horaInicioObj) || horaSeleccionadaObj.isAfter(horaFinObj);
+        } catch (DateTimeParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     private void guardarReserva(String restauranteId, String nombreCliente, ArrayList<Integer> mesasSeleccionadas) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -174,6 +218,7 @@ public class ReservaFragment extends Fragment {
             Reserva reserva = new Reserva(nombreCliente);
             reserva.setMesasSeleccionadas(mesasSeleccionadas, "Ocupado");
             reserva.setNombreRestaurante(restauranteId);
+            reserva.setNombreCliente(nombreCliente);
 
             // Obtener la fecha actual
             String fechaActual = obtenerFechaActual();
@@ -189,7 +234,6 @@ public class ReservaFragment extends Fragment {
                 reserva.setHoraReserva(obtenerHoraActual());
                 reserva.setFechadeReserva(fechaReserva);
                 reserva.setHoradeReserva(mostrarTimePicker());
-
 
                 db.collection(restauranteId + "_reservas").document(reservaId)
                         .set(reserva)
@@ -212,7 +256,6 @@ public class ReservaFragment extends Fragment {
                             intent.putExtra("fechadeReserva", reserva.getFechadeReserva());
                             intent.putExtra("horadeReserva", reserva.getHoradeReserva());
                             startActivity(intent);
-
 
                             // Eliminar el fragmento actual
                             getActivity().getSupportFragmentManager().beginTransaction().remove(ReservaFragment.this).commit();
@@ -265,7 +308,6 @@ public class ReservaFragment extends Fragment {
 
     private void actualizarEstadoMesas(String restauranteId, ArrayList<Integer> mesasSeleccionadas, String estado) {
         if (mesasSeleccionadas == null || mesasSeleccionadas.isEmpty()) {
-            Log.w(TAG, "Lista de mesas seleccionadas es nula o vacía");
             return;
         }
 
