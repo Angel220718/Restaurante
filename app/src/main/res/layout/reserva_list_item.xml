@@ -45,6 +45,22 @@
         android:paddingBottom="10dp"
         android:text="Hora de Reserva:" />
 
+    <TextView
+        android:id="@+id/fechadeReservaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="Hora de Reserva:" />
+
+    <TextView
+        android:id="@+id/horadeReservaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="Hora de Reserva:" />
+
     <Button
         android:id="@+id/btnEliminarReserva"
         android:layout_width="match_parent"

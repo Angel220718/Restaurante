@@ -1,10 +1,10 @@
 package com.example.reservacionrestaurant;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
@@ -25,12 +25,12 @@ public class ReservasDetalleActivity extends AppCompatActivity {
         String nombreReserva = intent.getStringExtra("nombreReserva");
         ArrayList<Integer> mesasSeleccionadas = intent.getIntegerArrayListExtra("mesasSeleccionadas");
         String nombreCliente = intent.getStringExtra("nombreCliente");
-        String fechaReserva = intent.getStringExtra("fechaReserva");
-        String horaReserva = intent.getStringExtra("horaReserva");
+        String fechadeReserva = intent.getStringExtra("fechadeReserva");
+        String horadeReserva = intent.getStringExtra("horadeReserva");
 
         tvNombreRestaurante.setText(nombreReserva);
         tvNombreCliente.setText("Nombre del Cliente: " + nombreCliente);
-        tvFechaReserva.setText("Fecha de Reserva: " + fechaReserva);
+        tvFechaReserva.setText("Fecha de Reserva: " + fechadeReserva);
 
         if (mesasSeleccionadas != null) {
             StringBuilder mesasReservadas = new StringBuilder("Mesas Reservadas: ");
@@ -43,6 +43,6 @@ public class ReservasDetalleActivity extends AppCompatActivity {
             tvMesasReservadas.setText("Mesas Reservadas: (sin mesas seleccionadas)");
         }
 
-        tvHoraReserva.setText("Hora de Reserva: " + horaReserva);
+        tvHoraReserva.setText("Hora de Reserva: " + horadeReserva);
     }
 }

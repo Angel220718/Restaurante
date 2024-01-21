@@ -62,6 +62,8 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
         TextView mesasSeleccionadasTextView = rowView.findViewById(R.id.mesasSeleccionadasTextView);
         TextView fechaReservaTextView = rowView.findViewById(R.id.fechaReservaTextView);
         TextView horaReservaTextView = rowView.findViewById(R.id.horaReservaTextView);
+        TextView fechadeReservaTextView = rowView.findViewById(R.id.fechadeReservaTextView);
+        TextView horadeReservaTextView = rowView.findViewById(R.id.horadeReservaTextView);
         Button eliminarReserva = rowView.findViewById(R.id.btnEliminarReserva);
 
         // Obtener el objeto Reserva para la posición actual
@@ -71,8 +73,10 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
         nombreRestauranteTextView.setText("Nombre del Restaurante: " + reserva.getNombreRestaurante());
         nombreClienteTextView.setText("Nombre del Cliente: " + reserva.getNombreCliente());
         mesasSeleccionadasTextView.setText("Mesas Seleccionadas: " + reserva.getMesasSeleccionadas());
-        fechaReservaTextView.setText("Fecha de Reserva: " + reserva.getFechaReserva());
-        horaReservaTextView.setText("Hora de Reserva: " + reserva.getHoraReserva());
+        fechaReservaTextView.setText("Fecha cuando se hizo la Reserva: " + reserva.getFechaReserva());
+        horaReservaTextView.setText("Hora cuando se hizo la Reserva: " + reserva.getHoraReserva());
+        fechadeReservaTextView.setText("Fecha Reservada: " + reserva.getFechadeReserva());
+        horadeReservaTextView.setText("Hora Reservada: " + reserva.getHoradeReserva());
 
         eliminarReserva.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,7 +13,9 @@ public class Reserva {
     private ArrayList<Integer> mesasSeleccionadas;
     private String fechaReserva;
     private String horaReserva;
-    private String estadoMesa; // Nuevo campo para el estado de la mesa
+    private String fechadeReserva;
+    private String horadeReserva;
+    private String estadoMesa;
 
     public Reserva() {
         // Incrementar el contador y asignar como ID
@@ -60,6 +62,22 @@ public class Reserva {
 
     public void setHoraReserva(String horaReserva) {
         this.horaReserva = horaReserva;
+    }
+
+    public String getFechadeReserva() {
+        return fechadeReserva;
+    }
+
+    public void setFechadeReserva(String fechadeReserva) {
+        this.fechadeReserva = fechadeReserva;
+    }
+
+    public String getHoradeReserva() {
+        return horadeReserva;
+    }
+
+    public void setHoradeReserva(String horadeReserva) {
+        this.horadeReserva = horadeReserva;
     }
 
     public String getNombreCliente() {
