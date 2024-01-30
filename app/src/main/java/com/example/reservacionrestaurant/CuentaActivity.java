@@ -36,17 +36,13 @@ public class CuentaActivity extends AppCompatActivity implements ReservaListAdap
 
         restauranteId = getIntent().getStringExtra("restaurante_id");
 
-        // Obtener referencia a ListView en tu diseño XML
         listView = findViewById(R.id.listViewReservas);
-//        eliminar = findViewById(R.id.btnEliminarReserva);
 
-        // Realizar la consulta a Firestore para obtener datos del documento específico
         cargarReservas();
 
     }
 
     private void cargarReservas() {
-        // Utiliza la referencia a la colección basada en el restauranteId
         CollectionReference reservasCollection = db.collection(restauranteId + "_reservas");
 
         reservasCollection.get()
@@ -63,12 +59,10 @@ public class CuentaActivity extends AppCompatActivity implements ReservaListAdap
                                 listaReservas.add(reserva);
                             }
 
-                            // Configurar el adaptador para el ListView
                             ReservaListAdapter adapter = new ReservaListAdapter(CuentaActivity.this, listaReservas);
                             adapter.setOnReservaDeleteListener(CuentaActivity.this);
                             listView.setAdapter(adapter);
                         } else {
-                            // Manejar errores de la consulta
                             Toast.makeText(CuentaActivity.this, "Error al obtener datos: " + task.getException(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -78,13 +72,10 @@ public class CuentaActivity extends AppCompatActivity implements ReservaListAdap
 
     @Override
     public void onReservaDelete(Reserva reserva) {
-        // Obtener el ID de la reserva
         String reservaId = reserva.getId();
 
-        // Eliminar la reserva de la base de datos
         eliminarReservaDeFirestore(reservaId);
 
-        // Actualizar la interfaz
         listaReservas.remove(reserva);
         ((ReservaListAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
@@ -94,21 +85,16 @@ public class CuentaActivity extends AppCompatActivity implements ReservaListAdap
 
         Reserva reserva = encontrarReservaPorId(reservaId);
         if (reserva != null) {
-            // Cambiar el estado de las mesas a "Libre"
             ArrayList<Integer> mesasSeleccionadas = reserva.getMesasSeleccionadas();
             cambiarEstadoMesasALibre(restauranteId, mesasSeleccionadas, reserva.getEstadoMesa());
 
-            // Lógica para eliminar la reserva de la base de datos (Firestore)
-            // Utiliza la referencia a la colección basada en el restauranteId
             CollectionReference reservasCollection = db.collection(restauranteId + "_reservas");
 
-            // Realiza la eliminación según el ID
             reservasCollection.document(reservaId).delete()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (!task.isSuccessful()) {
-                                // Manejar errores de eliminación en Firestore
                                 Toast.makeText(CuentaActivity.this, "Error al eliminar reserva de Firestore: " + task.getException(), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -151,13 +137,12 @@ public class CuentaActivity extends AppCompatActivity implements ReservaListAdap
     }
 
     private Reserva encontrarReservaPorId(String reservaId) {
-        // Buscar la reserva en la lista por su ID
         for (Reserva reserva : listaReservas) {
             if (reserva.getId().equals(reservaId)) {
                 return reserva;
             }
         }
-        return null; // Retorna null si no se encuentra la reserva
+        return null;
     }
 
 }

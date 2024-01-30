@@ -27,7 +27,6 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
         this.reservasList = reservasList;
     }
 
-    // Interfaz para manejar eventos del adaptador
     public interface ReservaListAdapterListener {
         void onEliminarReservaClick(Reserva reserva);
     }
@@ -40,10 +39,8 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
         void onReservaDelete(Reserva reserva);
     }
 
-    // Variable para almacenar el listener
     private OnReservaDeleteListener deleteListener;
 
-    // Método para establecer el listener
     public void setOnReservaDeleteListener(OnReservaDeleteListener listener) {
         this.deleteListener = listener;
     }
@@ -56,7 +53,6 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
         View rowView = inflater.inflate(R.layout.reserva_list_item, parent, false);
 
 
-        // Obtener referencias a los elementos de la interfaz de usuario en reserva_list_item
         TextView nombreRestauranteTextView = rowView.findViewById(R.id.nombreRestauranteTextView);
         TextView nombreClienteTextView = rowView.findViewById(R.id.nombreClienteTextView);
         TextView mesasSeleccionadasTextView = rowView.findViewById(R.id.mesasSeleccionadasTextView);
@@ -66,10 +62,8 @@ public class ReservaListAdapter extends ArrayAdapter<Reserva> {
         TextView horadeReservaTextView = rowView.findViewById(R.id.horadeReservaTextView);
         Button eliminarReserva = rowView.findViewById(R.id.btnEliminarReserva);
 
-        // Obtener el objeto Reserva para la posición actual
         Reserva reserva = reservasList.get(position);
 
-        // Configurar los elementos de la interfaz de usuario con los datos de la reserva
         nombreRestauranteTextView.setText("Nombre del Restaurante: " + reserva.getNombreRestaurante());
         nombreClienteTextView.setText("Nombre del Cliente: " + reserva.getNombreCliente());
         mesasSeleccionadasTextView.setText("Mesas Seleccionadas: " + reserva.getMesasSeleccionadas());

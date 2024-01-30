@@ -1,6 +1,7 @@
 package com.example.reservacionrestaurant.fragments;
 
 public class NombreObtenido {
+    //cree esta clase para obtener el nombre segun sea el inicio de seccion
     public static String getNombreo() {
         return Nombreo;
     }

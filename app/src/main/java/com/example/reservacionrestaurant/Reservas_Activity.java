@@ -54,8 +54,6 @@ public class Reservas_Activity extends AppCompatActivity {
                 imagenIdentificadora.setImageResource(R.drawable.fritamoro);
             }
 
-            // Pasa la información del restaurante al fragmento MesaFragment
-            // Por ejemplo, al seleccionar el restaurante McDonald
             MesaFragment mesaFragment = MesaFragment.newInstance("param1", "param2", restauranteId);
             mostrarFragment(mesaFragment);
         }

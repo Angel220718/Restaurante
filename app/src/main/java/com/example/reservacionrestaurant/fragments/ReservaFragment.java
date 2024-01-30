@@ -76,7 +76,6 @@ public class ReservaFragment extends Fragment {
         Log.e(TAG, "reservafrag usuario actual2 " + nombreUsuario);
         etNombreCliente.setText("Selecione una fecha y hora para su Reserva Sr(a): " + nombreUsuario);
 
-        // Verificar si los EditText se han inicializado correctamente
         if (etFechaReserva == null || etHoraReserva == null) {
             return view;
         }
@@ -125,47 +124,41 @@ public class ReservaFragment extends Fragment {
         int mesActual = c.get(Calendar.MONTH);
         int diaActual = c.get(Calendar.DAY_OF_MONTH);
 
-        // Crear un nuevo DatePickerDialog y configurarlo según tus necesidades
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 requireContext(),
                 (view, year, monthOfYear, dayOfMonth) -> {
-                    // Procesar la fecha seleccionada
+                    // Proceso la fecha seleccionada
                     String fechaSeleccionada = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, monthOfYear + 1, dayOfMonth);
                     etFechaReserva.setText(fechaSeleccionada);
                 },
                 añoActual, mesActual, diaActual);
 
-        // Mostrar el diálogo
         datePickerDialog.show();
 
-        // Devolver la fecha seleccionada
         return etFechaReserva.getText().toString();
     }
 
     private String mostrarTimePicker() {
-        // Obtener la hora actual
         final Calendar c = Calendar.getInstance();
         int horaActual = c.get(Calendar.HOUR_OF_DAY);
         int minutoActual = c.get(Calendar.MINUTE);
 
-        // Crear un nuevo TimePickerDialog y configurarlo según tus necesidades
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 requireContext(),
                 (view, hourOfDay, minute) -> {
-                    // Procesar la hora seleccionada
+
                     String horaSeleccionada = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
 
-                    // Verificar si la hora seleccionada está dentro del rango permitido
                     if (verificarHoraDisponible(horaSeleccionada)) {
                         etHoraReserva.setText(horaSeleccionada);
                     } else {
                         Toast.makeText(requireContext(), "Seleccione una hora válida dentro del rango: " + horaDisponible, Toast.LENGTH_SHORT).show();
-                        // Puedes mostrar el TimePickerDialog nuevamente o tomar otras medidas según tus requisitos
+
                     }
                 },
                 horaActual, minutoActual, true);
 
-        // Mostrar el diálogo
+        // Muestro el diálogo
         timePickerDialog.show();
 
         // Devolver la hora seleccionada
@@ -175,13 +168,12 @@ public class ReservaFragment extends Fragment {
     private boolean verificarHoraDisponible(String horaSeleccionada) {
         try {
 
-            // Obtener las horas de inicio y fin desde horaDisponible
+            // Obtengo  las horas de inicio y fin desde horaDisponible
             String[] horasDisponible = horaDisponible.split(" - ");
             String horaInicio = horasDisponible[0].trim();
             String horaFin = horasDisponible[1].trim();
 
 
-            // Convertir las horas a objetos LocalTime
             LocalTime horaSeleccionadaObj = LocalTime.parse(horaSeleccionada, DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()));
             LocalTime horaInicioObj = LocalTime.parse(horaInicio, DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()));
             LocalTime horaFinObj = LocalTime.parse(horaFin, DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()));
@@ -203,7 +195,6 @@ public class ReservaFragment extends Fragment {
             return;
         }
 
-        // Verificar que la fecha seleccionada sea válida
         if (verificarFechaSeleccionada()) {
             StringBuilder nombreReserva = new StringBuilder("Reserva para: ");
 
@@ -220,13 +211,12 @@ public class ReservaFragment extends Fragment {
             reserva.setNombreRestaurante(restauranteId);
             reserva.setNombreCliente(nombreCliente);
 
-            // Obtener la fecha actual
+
             String fechaActual = obtenerFechaActual();
 
-            // Obtener la fecha seleccionada
             String fechaReserva = etFechaReserva.getText().toString();
 
-            // Añadir un día a la fecha actual
+
             String fechaActualMasUnDia = sumarDiasAFecha(fechaActual, 1);
 
             if (fechaReserva.compareTo(fechaActualMasUnDia) >= 0) {

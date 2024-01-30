@@ -127,16 +127,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void iniciarNuevoActivity(String nombreUsuario) {
-        // Aquí creas un Intent para el nuevo Activity
+
         Intent intent = new Intent(MainActivity.this, ListaRestaurantActivity.class);
 
-        // Puedes agregar datos adicionales al Intent si es necesario
+
         intent.putExtra("nombreUsuario", nombreUsuario);
 
-        // Inicias el nuevo Activity
+
         startActivity(intent);
 
-        // Cierras el Activity actual
+
         finish();
     }
 

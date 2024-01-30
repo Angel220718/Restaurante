@@ -1,6 +1,5 @@
 package com.example.reservacionrestaurant.fragments;
 
-// Cambios en la clase Mesa
 public class Mesa {
     private String estadoMesa;
     private String informacionAdicional;

@@ -115,7 +115,6 @@ public class MesaFragment extends Fragment {
 //            crearColeccionMesas();
 //        });
 
-        // Obtener y actualizar los estados de las mesas desde Firebase
         obtenerEstadosMesasDesdeFirebase(adapter);
 
         return view;
@@ -170,25 +169,25 @@ public class MesaFragment extends Fragment {
                             estadosMesas.add(estadoMesa);
                         }
 
-                        // Ordenar las mesas de manera numérica
+                        // Ordeno las mesas de manera numérica
                         Collections.sort(estadosMesas, (mesa1, mesa2) -> {
                             String[] partesMesa1 = mesa1.split("_");
                             String[] partesMesa2 = mesa2.split("_");
 
-                            // Verificar si hay al menos dos partes en ambos nombres de mesa
+                            // Verifico si hay al menos dos partes en ambos nombres de mesa
                             if (partesMesa1.length > 1 && partesMesa2.length > 1) {
                                 try {
                                     int numeroMesa1 = Integer.parseInt(partesMesa1[1]);
                                     int numeroMesa2 = Integer.parseInt(partesMesa2[1]);
                                     return Integer.compare(numeroMesa1, numeroMesa2);
                                 } catch (NumberFormatException e) {
-                                    // Manejar la excepción si no se puede convertir a un número
+                                    // Manejo la excepción si no se puede convertir a un número
                                     e.printStackTrace();
-                                    return 0; // o devuelve un valor predeterminado según tus necesidades
+                                    return 0; // o devuelvo un valor predeterminado según tus necesidades
                                 }
                             } else {
-                                // Manejar el caso donde el formato no es el esperado
-                                return 0; // o devuelve un valor predeterminado según tus necesidades
+                                // Manejo el caso donde el formato no es el esperado
+                                return 0; // o devuelve un valor predeterminado según sea neesario
                             }
                         });
 
@@ -216,6 +215,7 @@ public class MesaFragment extends Fragment {
             notifyDataSetChanged();
         }
 
+        //Aki estan los constructores para obtener los valores de la mesa en el caso los iconos de la mesa
         @Override
         public int getCount() {
             return listaIconosMesas.length;

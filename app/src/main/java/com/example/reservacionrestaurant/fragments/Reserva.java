@@ -2,10 +2,11 @@ package com.example.reservacionrestaurant.fragments;
 
 import java.util.ArrayList;
 
+// aki cree la clase o moelo de como se guardaria las reservas en firebase
 public class Reserva {
-    private static int contadorReservas = 0; // Variable estática para el conteo de reservas
+    private static int contadorReservas = 0; // cree una variable estática para el conteo de reservas
 
-    private String id; // Cambiado a tipo String
+    private String id; // el id lo recibo en entero pero lo cambie a tipo String
 
 
     private String NombreRestaurante;
@@ -18,7 +19,6 @@ public class Reserva {
     private String estadoMesa;
 
     public Reserva() {
-        // Incrementar el contador y asignar como ID
         contadorReservas++;
         this.id = String.valueOf(contadorReservas);
     }
@@ -27,7 +27,6 @@ public class Reserva {
         this.id = id;
         this.nombreCliente = nombreCliente;
     }
-
 
     // Constructor sin mesasSeleccionadas
     public Reserva(String nombreCliente) {
